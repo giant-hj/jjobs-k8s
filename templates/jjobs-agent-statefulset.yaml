@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jjobs-agent
+  labels:
+    app: jjobs-agent
+  namespace: default
+spec:
+  replicas: 2
+  serviceName: jjobs-agent
+  selector:
+    matchLabels:
+      app: jjobs-agent
+  template:
+    metadata:
+      labels:
+        app: jjobs-agent
+    spec:
+      terminationGracePeriodSeconds: 120
+      containers:
+      - name: jjobs-agent-container
+        image: 418591294355.dkr.ecr.ap-northeast-2.amazonaws.com/jjobs:2.10.0-beta
+        env:
+        - name: AGENT_GROUP_ID
+          value: "0"
+        - name: JJOBS_SERVER_IP
+          value: "jjobs.default.svc.cluster.local"
+        - name: JJOBS_SERVER_PORT
+          value: "7075"
+        - name: LOGS_BASE
+          value: "/logs001/jjobs"
+        - name: LOG_KEEP_DATE
+          value: "5"
+        - name: LOG_DELETE_YN
+          value: "Y"
+        - name: ON_BOOT
+          value: "yes"
+        - name: INSTALL_KIND
+          value: "A"
+        volumeMounts:
+        - mountPath: /logs001/jjobs
+          name: jjobs-default-log
+      volumes:
+      - name: jjobs-default-log
+        persistentVolumeClaim:
+          claimName: efs-pvc-fargate-ms
+

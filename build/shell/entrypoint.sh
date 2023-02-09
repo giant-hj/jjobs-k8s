@@ -31,7 +31,7 @@ then
     echo "start manager and server..."
     . $JJOBS_BASE/start_manager.sh &
     sleep 30
-    . $JJOBS_base/start_server.sh &
+    . $JJOBS_BASE/start_server.sh &
   else
     echo "manual start..."
   fi

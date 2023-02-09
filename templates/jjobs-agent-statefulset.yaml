@@ -40,6 +40,13 @@ spec:
         volumeMounts:
         - mountPath: /logs001/jjobs
           name: jjobs-default-log
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "1"
+          limits:
+            memory: "512Mi"
+            cpu: "1"
       volumes:
       - name: jjobs-default-log
         persistentVolumeClaim:

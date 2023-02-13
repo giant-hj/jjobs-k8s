@@ -36,12 +36,6 @@ if [ "$INSTALL_KIND" == "S" ] || [ "$INSTALL_KIND" == "F" ] ; then
         else
           sed -i '3iexport JJOB_SERVER_IP='"$HOSTNAME"'.'"$JJOB_SERVICE_NAME"'' $JJOBS_BASE/start_server.sh
         fi
-	
-        if [ -z "$JJOB_SERVER_IP" ]; then
-          echo skip to set the JJOB_SERVER_IP
-        else
-          sed -i '3iexport JJOB_SERVER_IP='"$JJOB_SERVER_IP"'' $JJOBS_BASE/start_server.sh
-        fi
 
 fi
 

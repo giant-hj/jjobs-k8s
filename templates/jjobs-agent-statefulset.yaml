@@ -25,7 +25,7 @@ spec:
           value: "0"
         - name: JJOBS_SERVER_IP
           value: "jjobs.default.svc.cluster.local"
-        - name: JJOBS_SERVER_PORT
+        - name: SERVER_WEB_PORT
           value: "7075"
         - name: LOGS_BASE
           value: "/logs001/jjobs"

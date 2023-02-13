@@ -16,7 +16,7 @@ spec:
       terminationGracePeriodSeconds: 180
       containers:
       - name: jjobs
-        image: public.ecr.aws/g7p3s5l4/jjobs
+        image: public.ecr.aws/g7p3s5l4/jjobs:2.10.0-beta
         env:
         - name: MANAGER_WEB_PORT
           value: "7065"

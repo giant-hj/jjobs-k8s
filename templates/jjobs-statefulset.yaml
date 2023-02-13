@@ -44,8 +44,8 @@ spec:
           value: "F"
         - name: AGENT_GROUP_ID
           value: "1"
-        - name: JJOB_SERVICE_NAME
-          value: "jjobs.default.svc.cluster.local"
+        - name: JJOB_SERVER_IP
+          value: <input_your_server_ip>
         ports:
         - containerPort: 7065
         - containerPort: 7075

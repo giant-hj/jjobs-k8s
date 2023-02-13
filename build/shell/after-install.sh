@@ -29,12 +29,20 @@ if [ "$INSTALL_KIND" == "S" ] || [ "$INSTALL_KIND" == "F" ] ; then
         INT=$((id))
         SERVER_ID=$(($INT + 1))
         sed -i 's@export JJOB_SERVER_ID=.*$@export JJOB_SERVER_ID=1-'"$SERVER_ID"'@g' $JJOBS_BASE/start_server.sh
+        sed -i 's@tail -f /engn001/jjobs/server/logs/catalina.out$@tail -f /logs001/jjobs/server/server.log@g' $JJOBS_BASE/start_server.sh
 
         if [ -z "$JJOB_SERVICE_NAME" ]; then
           echo skip to set the JJOB_SERVER_IP
         else
           sed -i '3iexport JJOB_SERVER_IP='"$HOSTNAME"'.'"$JJOB_SERVICE_NAME"'' $JJOBS_BASE/start_server.sh
         fi
+	
+        if [ -z "$JJOB_SERVER_IP" ]; then
+          echo skip to set the JJOB_SERVER_IP
+        else
+          sed -i '3iexport JJOB_SERVER_IP='"$JJOB_SERVER_IP"'' $JJOBS_BASE/start_server.sh
+        fi
+
 fi
 
 if [ "$INSTALL_KIND" == "M" ] || [ "$INSTALL_KIND" == "F" ] ; then
@@ -47,4 +55,7 @@ if [ "$INSTALL_KIND" == "M" ] || [ "$INSTALL_KIND" == "F" ] ; then
         sed -i '/<AppenderRef ref="console/d' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/properties/log4j2.xml
         sed -i 's@<!--@@g' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/properties/log4j2.xml
         sed -i 's@-->@@g' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/properties/log4j2.xml
+        
+	echo edit start_manager.sh
+	sed -i "5d" $JJOBS_BASE/start_manager.sh
 fi

@@ -19,7 +19,7 @@ spec:
       terminationGracePeriodSeconds: 120
       containers:
       - name: jjobs-agent-container
-        image: 418591294355.dkr.ecr.ap-northeast-2.amazonaws.com/jjobs:2.10.0-beta
+        image: public.ecr.aws/g7p3s5l4/jjobs:2.10.0-beta
         env:
         - name: AGENT_GROUP_ID
           value: "0"

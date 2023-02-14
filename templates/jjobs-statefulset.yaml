@@ -54,11 +54,6 @@ spec:
         - containerPort: 17077
         - containerPort: 17078
         - containerPort: 17079
-        - containerPort: 27075
-        - containerPort: 27076
-        - containerPort: 27077
-        - containerPort: 27078
-        - containerPort: 27079
         volumeMounts:
         - mountPath: /logs001/jjobs
           name: jjobs-logs

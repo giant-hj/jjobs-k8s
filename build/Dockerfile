@@ -84,6 +84,12 @@ RUN mkdir -p $WORKING_DIR
 #RUN chown -R jjobs:jjobs $LOGS_BASE
 #RUN chown -R jjobs:jjobs $WORKING_DIR
 
+# aws-cli
+# -------------------------------------------------------------
+RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip
+RUN unzip awscliv2.zip
+RUN ./aws/install
+
 # kubectl
 # -------------------------------------------------------------
 RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl

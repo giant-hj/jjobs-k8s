@@ -19,7 +19,7 @@ spec:
       terminationGracePeriodSeconds: 120
       containers:
       - name: jjobs-agent-container
-        image: ghcr.io/devonlab/jjobs:2.10.0-beta
+        image: devonlab/jjobs
         env:
         - name: AGENT_GROUP_ID
           value: "0"
@@ -45,8 +45,8 @@ spec:
             memory: "512Mi"
             cpu: "1"
           limits:
-            memory: "512Mi"
-            cpu: "1"
+            memory: "1024Mi"
+            cpu: "2"
       volumes:
       - name: jjobs-default-log
         persistentVolumeClaim:

@@ -18,7 +18,7 @@ spec:
       terminationGracePeriodSeconds: 120
       containers:
       - name: jjobs-agent-container
-        image: ghcr.io/devonlab/jjobs:2.10.0-beta
+        image: devonlab/jjobs
         env:
         - name: AGENT_GROUP_ID
           value: "0"

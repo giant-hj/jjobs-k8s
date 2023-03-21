@@ -10,12 +10,12 @@ metadata:
 spec:
   ports:
     - name: manager-web
-      port: 8080
-      targetPort: 8080
+      port: 7065
+      targetPort: 7065
       protocol: TCP
     - name: server-web
-      port: 8090
-      targetPort: 8090
+      port: 7075
+      targetPort: 7075
       protocol: TCP
   type: LoadBalancer
   selector:
@@ -34,24 +34,24 @@ spec:
   ports:
     - name: server-tcp-0
       protocol: TCP
-      port: 19000
-      targetPort: 19000
+      port: 17075
+      targetPort: 17075
     - name: server-tcp-1
       protocol: TCP
-      port: 19001
-      targetPort: 19001
+      port: 17076
+      targetPort: 17076
     - name: server-tcp-2
       protocol: TCP
-      port: 19002
-      targetPort: 19002
+      port: 17077
+      targetPort: 17077
     - name: server-tcp-3
       protocol: TCP
-      port: 19003
-      targetPort: 19003
+      port: 17078
+      targetPort: 17078
     - name: server-tcp-4
       protocol: TCP
-      port: 19004
-      targetPort: 19004
+      port: 17079
+      targetPort: 17079
   type: LoadBalancer
   selector:
     statefulset.kubernetes.io/pod-name: jjobs-0
@@ -69,24 +69,24 @@ spec:
   ports:
     - name: server-tcp-0
       protocol: TCP
-      port: 19000
-      targetPort: 19000
+      port: 17075
+      targetPort: 17075
     - name: server-tcp-1
       protocol: TCP
-      port: 19001
-      targetPort: 19001
+      port: 17076
+      targetPort: 17076
     - name: server-tcp-2
       protocol: TCP
-      port: 19002
-      targetPort: 19002
+      port: 17077
+      targetPort: 17077
     - name: server-tcp-3
       protocol: TCP
-      port: 19003
-      targetPort: 19003
+      port: 17078
+      targetPort: 17078
     - name: server-tcp-4
       protocol: TCP
-      port: 19004
-      targetPort: 19004
+      port: 17079
+      targetPort: 17079
   type: LoadBalancer
   selector:
     statefulset.kubernetes.io/pod-name: jjobs-1
@@ -103,5 +103,5 @@ spec:
   ports:
     - name: server-web
       protocol: TCP
-      port: 8090
-      targetPort: 8090
+      port: 7075
+      targetPort: 7075

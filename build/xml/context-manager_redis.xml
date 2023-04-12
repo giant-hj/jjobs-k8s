@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+  <context:component-scan base-package="jjob.common.extension.api, jjob.common.api, jjob.manager.web">
+    <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+  </context:component-scan>
+
+  <util:properties id="managementConfig" location="classpath:/properties/management.properties"/>
+
+  <util:properties id="accessControlConfig" location="classpath:/properties/access_control.properties"/>
+
+  <bean id="drmInterceptor" class="jjob.manager.web.extension.drm.DrmInterceptor">
+    <property name="drmManager" ref="drmManager"></property>
+    <property name="activate" value="false"></property>
+    <property name="contentTypes">
+      <list>
+        <value>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</value>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="drmManager" class="jjob.manager.web.extension.drm.vendor.DefaultDrmManager">
+  </bean>
+
+  <bean id="oauthAuthService" class="jjob.common.api.common.oauth.authorization.DefaultOAuthAuthService">
+  </bean>
+
+  <context:annotation-config/>
+
+  <util:constant static-field="org.springframework.session.data.redis.config.ConfigureRedisAction.NO_OP" />
+
+  <bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration">
+  </bean>
+
+  <bean id="lettuceConnectionFactory" class="org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory" destroy-method="destroy">
+    <property name="hostName" value="$REDIS_HOST" />
+    <property name="port" value="$REDIS_PORT" />
+  </bean>
+
+  <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+    <property name="connectionFactory" ref="lettuceConnectionFactory" />
+  </bean>
+
+</beans>

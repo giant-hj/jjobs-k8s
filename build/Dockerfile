@@ -101,6 +101,8 @@ RUN ln -snf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
 # Copy files needed during both installation and runtime
 # -------------
+COPY xml/web_redis.xml $WORKING_DIR/
+COPY xml/context-manager_redis.xml $WORKING_DIR/
 COPY shell/entrypoint.sh /entrypoint.sh
 COPY shell/install-jjobs.sh shell/after-install.sh $WORKING_DIR/
 COPY shell/install-agent.sh $WORKING_DIR/

@@ -28,7 +28,6 @@ echo /install/$INSTALL_FILE  \
         --jdbc_url $JDBC_URL \
         --dbms_user $DB_USER  \
         --dbms_pswd $DB_PASSWD  \
-        --use_db_session_storage \
         --man_web_port $MANAGER_WEB_PORT  \
         --svr_service_web_port $SERVER_WEB_PORT \
         --svr_cotrol_base_port $SERVER_TCP_PORT \
@@ -47,7 +46,6 @@ echo y | /install/$INSTALL_FILE  \
         --jdbc_url $JDBC_URL \
         --dbms_user $DB_USER  \
         --dbms_pswd $DB_PASSWD  \
-        --use_db_session_storage \
         --man_web_port $MANAGER_WEB_PORT  \
         --svr_service_web_port $SERVER_WEB_PORT \
         --svr_cotrol_base_port $SERVER_TCP_PORT \

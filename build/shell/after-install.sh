@@ -50,10 +50,11 @@ if [ "$INSTALL_KIND" == "M" ] || [ "$INSTALL_KIND" == "F" ] ; then
         sed -i 's@<!--@@g' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/properties/log4j2.xml
         sed -i 's@-->@@g' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/properties/log4j2.xml
 
-        if [ "$USE_REDIS_SESSION_CLUSTERING" == "Y" ] && [ -n "$REDIS_HOST" ] && [ -n "$REDIS_PORT" ]; then
+        if [ "$USE_REDIS_SESSION_CLUSTERING" == "Y" ] && [ -n "$REDIS_NAMESPACE" ] && [ -n "$REDIS_HOST" ] && [ -n "$REDIS_PORT" ]; then
                 echo manager xml setting for redis
                 cp $WORKING_DIR/web_redis.xml $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/web.xml
                 cp $WORKING_DIR/context-manager_redis.xml $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/spring/context-manager.xml
+                sed -i 's/$REDIS_NAMESPACE/'"$REDIS_NAMESPACE"'/g' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/spring/context-manager.xml
                 sed -i 's/$REDIS_HOST/'"$REDIS_HOST"'/g' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/spring/context-manager.xml
                 sed -i 's/$REDIS_PORT/'"$REDIS_PORT"'/g' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/spring/context-manager.xml
         fi

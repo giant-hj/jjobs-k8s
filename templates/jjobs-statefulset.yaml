@@ -48,6 +48,8 @@ spec:
           value: "jjobs.default.svc.cluster.local"
         - name: USE_REDIS_SESSION_CLUSTERING
           value: "Y"
+        - name: REDIS_NAMESPACE
+          value: <input_your_redis_namespace>
         - name: REDIS_HOST
           value: <input_your_redis_host>
         - name: REDIS_PORT

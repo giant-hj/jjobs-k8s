@@ -36,6 +36,7 @@
   <util:constant static-field="org.springframework.session.data.redis.config.ConfigureRedisAction.NO_OP" />
 
   <bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration">
+    <property name="redisNamespace" value="$REDIS_NAMESPACE" />
   </bean>
 
   <bean id="lettuceConnectionFactory" class="org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory" destroy-method="destroy">

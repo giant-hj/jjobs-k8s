@@ -1,6 +1,7 @@
 #!/bin/sh
 
 echo "properties,log setting"
+HOSTNAME=`hostname`
 
 if [ "$INSTALL_KIND" == "A" ] || [ "$INSTALL_KIND" == "F" ] ; then
         echo agent log setting - resource.properties
@@ -21,6 +22,7 @@ if [ "$INSTALL_KIND" == "S" ] || [ "$INSTALL_KIND" == "F" ] ; then
         sed -i '/<AppenderRef ref="console/d' $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/properties/log4j2.xml
         sed -i 's@<!--@@g' $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/properties/log4j2.xml
         sed -i 's@-->@@g' $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/properties/log4j2.xml
+        sed -i 's/\/logs001\/jjobs\/server/\/logs001\/jjobs\/server\/'"$HOSTNAME"'/g' $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/properties/log4j2.xml
 
         echo edit start_server.sh
 
@@ -49,6 +51,7 @@ if [ "$INSTALL_KIND" == "M" ] || [ "$INSTALL_KIND" == "F" ] ; then
         sed -i '/<AppenderRef ref="console/d' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/properties/log4j2.xml
         sed -i 's@<!--@@g' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/properties/log4j2.xml
         sed -i 's@-->@@g' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/properties/log4j2.xml
+        sed -i 's/\/logs001\/jjobs\/manager/\/logs001\/jjobs\/manager\/'"$HOSTNAME"'/g' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/properties/log4j2.xml
 
         if [ "$USE_REDIS_SESSION_CLUSTERING" == "Y" ] && [ -n "$REDIS_NAMESPACE" ] && [ -n "$REDIS_HOST" ] && [ -n "$REDIS_PORT" ]; then
                 echo manager xml setting for redis

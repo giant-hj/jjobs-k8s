@@ -44,6 +44,7 @@ echo y | /install/$INSTALL_FILE  \
         --install_mode I  \
         --$USE_DB_TYPE  \
         --jdbc_url $JDBC_URL \
+	--use_db_session_storage \
         --dbms_user $DB_USER  \
         --dbms_pswd $DB_PASSWD  \
         --man_web_port $MANAGER_WEB_PORT  \

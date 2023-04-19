@@ -65,6 +65,7 @@ RUN yum -y install zip
 RUN yum -y install unzip
 RUN yum -y install procps
 RUN yum -y install telnet
+RUN yum -y install fontconfig
 RUN yum -y install passwd  #RUN mkdir /var/run/sshd
 #RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N ''
 

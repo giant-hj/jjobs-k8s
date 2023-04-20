@@ -47,6 +47,14 @@ spec:
           limits:
             memory: "1024Mi"
             cpu: "2"
+        livenessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - /engn001/jjobs/agent/healthcheck.sh
+          initialDelaySeconds: 300
+          periodSeconds: 5
       volumes:
       - name: jjobs-default-log
         persistentVolumeClaim:

@@ -39,6 +39,14 @@ spec:
         volumeMounts:
         - mountPath: /logs001/jjobs
           name: jjobs-default-log
+        livenessProbe:
+          exec:
+            command:
+            - /bin/bash
+            - -c
+            - /engn001/jjobs/agent/healthcheck.sh
+          initialDelaySeconds: 300
+          periodSeconds: 5
       volumes:
       - name: jjobs-default-log
         persistentVolumeClaim:

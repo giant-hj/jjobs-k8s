@@ -12,6 +12,7 @@ if [ "$INSTALL_KIND" == "A" ] || [ "$INSTALL_KIND" == "F" ] ; then
         sed -i 's@log.file.keep.backup_delete_yn=.*$@log.file.keep.backup_delete_yn='"$LOG_DELETE_YN"'@g' $JJOBS_BASE/agent/app/META-INF/resource.properties
 
         cp $WORKING_DIR/agent-healthcheck.sh $JJOBS_BASE/agent/healthcheck.sh
+        mkdir -p $JJOBS_BASE/agent/.bin
 fi
 
 if [ "$INSTALL_KIND" == "S" ] || [ "$INSTALL_KIND" == "F" ] ; then

@@ -42,6 +42,9 @@ if [ "$INSTALL_KIND" == "S" ] || [ "$INSTALL_KIND" == "F" ] ; then
           sed -i '3iexport JJOB_SERVER_IP='"$HOSTNAME"'.'"$JJOB_SERVICE_NAME"'' $JJOBS_BASE/start_server.sh
         fi
 
+        echo "Download AWS JDBC Driver.."
+        wget https://github.com/awslabs/aws-advanced-jdbc-wrapper/releases/download/2.0.0/aws-advanced-jdbc-wrapper-2.0.0.jar -P $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/lib
+
 fi
 
 if [ "$INSTALL_KIND" == "M" ] || [ "$INSTALL_KIND" == "F" ] ; then
@@ -67,4 +70,8 @@ if [ "$INSTALL_KIND" == "M" ] || [ "$INSTALL_KIND" == "F" ] ; then
         
 	echo edit start_manager.sh
 	sed -i "5d" $JJOBS_BASE/start_manager.sh
+
+        echo "Download AWS JDBC Driver.."
+        wget https://github.com/awslabs/aws-advanced-jdbc-wrapper/releases/download/2.0.0/aws-advanced-jdbc-wrapper-2.0.0.jar -P $JJOBS_BASE/server/webapps/jjob-manager/WEB-INF/lib
+
 fi

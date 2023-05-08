@@ -13,6 +13,20 @@ if [ "$INSTALL_KIND" == "A" ] || [ "$INSTALL_KIND" == "F" ] ; then
 
         cp $WORKING_DIR/agent-healthcheck.sh $JJOBS_BASE/agent/healthcheck.sh
         mkdir -p $JJOBS_BASE/agent/.bin
+
+        if [ -n "$AGENT_CACHE_DIR" ] ; then
+                rm -rf $JJOBS_BASE/agent/ctrl
+                mkdir -p $AGENT_CACHE_DIR/$HOSTNAME/ctrl
+                ln -s $AGENT_CACHE_DIR/$HOSTNAME/ctrl $JJOBS_BASE/agent/ctrl
+
+                rm -rf $JJOBS_BASE/agent/fd
+                mkdir -p $AGENT_CACHE_DIR/$HOSTNAME/fd
+                ln -s $AGENT_CACHE_DIR/$HOSTNAME/fd $JJOBS_BASE/agent/fd
+
+                rm -rf $JJOBS_BASE/agent/seq
+                mkdir -p $AGENT_CACHE_DIR/$HOSTNAME/seq
+                ln -s $AGENT_CACHE_DIR/$HOSTNAME/seq $JJOBS_BASE/agent/seq
+        fi
 fi
 
 if [ "$INSTALL_KIND" == "S" ] || [ "$INSTALL_KIND" == "F" ] ; then
@@ -42,6 +56,11 @@ if [ "$INSTALL_KIND" == "S" ] || [ "$INSTALL_KIND" == "F" ] ; then
           sed -i '3iexport JJOB_SERVER_IP='"$HOSTNAME"'.'"$JJOB_SERVICE_NAME"'' $JJOBS_BASE/start_server.sh
         fi
 
+        if [ "$USE_DB_ENCRYPT" == "Y" ] ; then
+                echo meta db encryption setting
+                sed -i 's/org\.apache\.commons\.dbcp2\.BasicDataSource/jjob.common.api.common.datasource.SecureDataSource/g' $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/spring/context-datasource.xml
+        fi  
+
         echo "Download AWS JDBC Driver.."
         wget https://github.com/awslabs/aws-advanced-jdbc-wrapper/releases/download/2.0.0/aws-advanced-jdbc-wrapper-2.0.0.jar -P $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/lib
 
@@ -67,6 +86,11 @@ if [ "$INSTALL_KIND" == "M" ] || [ "$INSTALL_KIND" == "F" ] ; then
                 sed -i 's/$REDIS_HOST/'"$REDIS_HOST"'/g' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/spring/context-manager.xml
                 sed -i 's/$REDIS_PORT/'"$REDIS_PORT"'/g' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/spring/context-manager.xml
         fi
+
+        if [ "$USE_DB_ENCRYPT" == "Y" ] ; then
+                echo meta db encryption setting
+                sed -i 's/org\.apache\.commons\.dbcp2\.BasicDataSource/jjob.common.api.common.datasource.SecureDataSource/g' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/spring/context-datasource.xml
+        fi          
         
 	echo edit start_manager.sh
 	sed -i "5d" $JJOBS_BASE/start_manager.sh

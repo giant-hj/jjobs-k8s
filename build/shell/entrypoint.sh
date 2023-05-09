@@ -30,7 +30,7 @@ then
   elif [ "$ON_BOOT" == "exceptagent" ]; then
     echo "start manager and server..."
     . $JJOBS_BASE/start_manager.sh &
-    sleep 30
+    sleep 10
     . $JJOBS_BASE/start_server.sh &
   else
     echo "manual start..."

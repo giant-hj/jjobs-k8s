@@ -19,6 +19,14 @@ else
   export USE_DB_TYPE="use_postgresql"
 fi
 
+if [ -z "$DB_USER" ]; then
+  export DB_USER="jjobs"
+fi
+
+if [ -z "$DB_PASSWD" ]; then
+  export DB_PASSWD="jjobs1234"
+fi
+
 
 echo /install/$INSTALL_FILE  \
         --base_path $JJOBS_BASE  \
@@ -44,7 +52,7 @@ echo y | /install/$INSTALL_FILE  \
         --install_mode I  \
         --$USE_DB_TYPE  \
         --jdbc_url $JDBC_URL \
-	--use_db_session_storage \
+	      --use_db_session_storage \
         --dbms_user $DB_USER  \
         --dbms_pswd $DB_PASSWD  \
         --man_web_port $MANAGER_WEB_PORT  \

@@ -18,14 +18,6 @@ if [ "$INSTALL_KIND" == "A" ] || [ "$INSTALL_KIND" == "F" ] ; then
                 rm -rf $JJOBS_BASE/agent/ctrl
                 mkdir -p $AGENT_CACHE_DIR/$HOSTNAME/ctrl
                 ln -s $AGENT_CACHE_DIR/$HOSTNAME/ctrl $JJOBS_BASE/agent/ctrl
-
-                rm -rf $JJOBS_BASE/agent/fd
-                mkdir -p $AGENT_CACHE_DIR/$HOSTNAME/fd
-                ln -s $AGENT_CACHE_DIR/$HOSTNAME/fd $JJOBS_BASE/agent/fd
-
-                rm -rf $JJOBS_BASE/agent/seq
-                mkdir -p $AGENT_CACHE_DIR/$HOSTNAME/seq
-                ln -s $AGENT_CACHE_DIR/$HOSTNAME/seq $JJOBS_BASE/agent/seq
         fi
 fi
 

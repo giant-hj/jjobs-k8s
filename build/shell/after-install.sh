@@ -44,10 +44,10 @@ if [ "$INSTALL_KIND" == "S" ] || [ "$INSTALL_KIND" == "F" ] ; then
         if [ "$USE_DB_ENCRYPT" == "Y" ] && [ -n "$ENCRYPTED_DB_USER" ] && [ -n "$ENCRYPTED_DB_PASSWD" ] ; then
                 echo "meta db encryption setting"
                 sed -i 's/org\.apache\.commons\.dbcp2\.BasicDataSource/jjob.common.api.common.datasource.SecureDataSource/g' $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/spring/context-datasource.xml
-                sed -i '15d'  $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/spring/context-datasource.xml
-                sed -i '15i    <property name="username" value='\"$ENCRYPTED_DB_USER\"'/>' $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/spring/context-datasource.xml
-                sed -i '16d'  $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/spring/context-datasource.xml
-                sed -i '16i    <property name="password" value='\"$ENCRYPTED_DB_PASSWD\"'/>' $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/spring/context-datasource.xml
+                sed -i '18d'  $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/spring/context-datasource.xml
+                sed -i '18i    <property name="username" value='\"$ENCRYPTED_DB_USER\"'/>' $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/spring/context-datasource.xml
+                sed -i '19d'  $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/spring/context-datasource.xml
+                sed -i '19i    <property name="password" value='\"$ENCRYPTED_DB_PASSWD\"'/>' $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/spring/context-datasource.xml
 
         fi
 

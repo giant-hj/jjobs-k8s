@@ -21,6 +21,10 @@ spec:
       containers:
       - name: jjobs-agent-container
         image: devonlab/jjobs
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh","-c","kubectl delete pods $HOSTNAME"]
         env:
         - name: AGENT_GROUP_ID
           value: "0"

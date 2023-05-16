@@ -43,6 +43,11 @@ if [ "$INSTALL_KIND" == "S" ] || [ "$INSTALL_KIND" == "F" ] ; then
 
         fi
 
+        if [ -n "$JDBC_PARAMETERS" ]; then
+                echo "add the jdbc url connection parameters.."
+                sed -i '17s/\"\/>/'$JDBC_PARAMETERS'\"\/>/' $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/spring/context-datasource.xml
+        fi
+
         echo "edit start_server.sh"
 
         str=$HOSTNAME
@@ -61,6 +66,11 @@ if [ "$INSTALL_KIND" == "S" ] || [ "$INSTALL_KIND" == "F" ] ; then
         echo "Download AWS JDBC Driver.."
         wget https://github.com/awslabs/aws-advanced-jdbc-wrapper/releases/download/2.0.0/aws-advanced-jdbc-wrapper-2.0.0.jar -P $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/lib
 
+        echo "setting for java security.."
+        sed -i '307d' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security
+        sed -i '307inetworkaddress.cache.ttl=1' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security
+        sed -i '322d' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security
+        sed -i '322inetworkaddress.cache.negative.ttl=3' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security
 fi
 
 if [ "$INSTALL_KIND" == "M" ] || [ "$INSTALL_KIND" == "F" ] ; then
@@ -93,6 +103,11 @@ if [ "$INSTALL_KIND" == "M" ] || [ "$INSTALL_KIND" == "F" ] ; then
                 sed -i '16i    <property name="password" value='\"$ENCRYPTED_DB_PASSWD\"'/>' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/spring/context-datasource.xml
 
         fi
+
+        if [ -n "$JDBC_PARAMETERS" ]; then
+                echo "add the jdbc url connection parameters.."
+                sed -i '14s/\"\/>/'$JDBC_PARAMETERS'\"\/>/' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/spring/context-datasource.xml
+        fi
         
 	echo "edit start_manager.sh"
 	sed -i "5d" $JJOBS_BASE/start_manager.sh
@@ -100,4 +115,9 @@ if [ "$INSTALL_KIND" == "M" ] || [ "$INSTALL_KIND" == "F" ] ; then
         echo "Download AWS JDBC Driver.."
         wget https://github.com/awslabs/aws-advanced-jdbc-wrapper/releases/download/2.0.0/aws-advanced-jdbc-wrapper-2.0.0.jar -P $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/lib
 
+        echo "setting for java security.."
+        sed -i '307d' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security
+        sed -i '307inetworkaddress.cache.ttl=1' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security
+        sed -i '322d' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security
+        sed -i '322inetworkaddress.cache.negative.ttl=3' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security
 fi

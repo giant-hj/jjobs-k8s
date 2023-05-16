@@ -28,6 +28,8 @@ spec:
           value: <input_your_db_type>
         - name: JDBC_URL
           value: <input_your_jdbc_url>
+        - name: JDBC_PARAMETERS
+          value: <input_your_jdbc_parameters>
         - name: DB_USER
           value: <input_your_db_username>
         - name: DB_PASSWD

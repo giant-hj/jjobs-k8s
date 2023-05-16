@@ -62,7 +62,7 @@ spec:
             - /engn001/jjobs/agent/healthcheck.sh
           initialDelaySeconds: 300
           periodSeconds: 5
-          timeoutSeconds : 10
+          timeoutSeconds: 10
       volumes:
       - name: jjobs-default-log
         persistentVolumeClaim:

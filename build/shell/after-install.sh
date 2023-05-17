@@ -13,12 +13,6 @@ if [ "$INSTALL_KIND" == "A" ] || [ "$INSTALL_KIND" == "F" ] ; then
 
         cp $WORKING_DIR/agent-healthcheck.sh $JJOBS_BASE/agent/healthcheck.sh
         mkdir -p $JJOBS_BASE/agent/.bin
-
-        if [ -n "$AGENT_CACHE_DIR" ] ; then
-                rm -rf $JJOBS_BASE/agent/ctrl
-                mkdir -p $AGENT_CACHE_DIR/$HOSTNAME/ctrl
-                ln -s $AGENT_CACHE_DIR/$HOSTNAME/ctrl $JJOBS_BASE/agent/ctrl
-        fi
 fi
 
 if [ "$INSTALL_KIND" == "S" ] || [ "$INSTALL_KIND" == "F" ] ; then
@@ -62,9 +56,6 @@ if [ "$INSTALL_KIND" == "S" ] || [ "$INSTALL_KIND" == "F" ] ; then
         else
           sed -i '3iexport JJOB_SERVER_IP='"$HOSTNAME"'.'"$JJOB_SERVICE_NAME"'' $JJOBS_BASE/start_server.sh
         fi
-
-        echo "Download AWS JDBC Driver.."
-        wget https://github.com/awslabs/aws-advanced-jdbc-wrapper/releases/download/2.0.0/aws-advanced-jdbc-wrapper-2.0.0.jar -P $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/lib
 
         echo "setting for java security.."
         sed -i '307d' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security
@@ -111,9 +102,6 @@ if [ "$INSTALL_KIND" == "M" ] || [ "$INSTALL_KIND" == "F" ] ; then
         
 	echo "edit start_manager.sh"
 	sed -i "5d" $JJOBS_BASE/start_manager.sh
-
-        echo "Download AWS JDBC Driver.."
-        wget https://github.com/awslabs/aws-advanced-jdbc-wrapper/releases/download/2.0.0/aws-advanced-jdbc-wrapper-2.0.0.jar -P $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/lib
 
         echo "setting for java security.."
         sed -i '307d' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security

@@ -35,6 +35,7 @@ if [ "$INSTALL_KIND" == "S" ] || [ "$INSTALL_KIND" == "F" ] ; then
                 sed -i '19d'  $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/spring/context-datasource.xml
                 sed -i '19i    <property name="password" value='\"$ENCRYPTED_DB_PASSWD\"'/>' $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/spring/context-datasource.xml
 
+		
         fi
 
         if [ -n "$JDBC_PARAMETERS" ]; then
@@ -92,6 +93,11 @@ if [ "$INSTALL_KIND" == "M" ] || [ "$INSTALL_KIND" == "F" ] ; then
                 sed -i '15i    <property name="username" value='\"$ENCRYPTED_DB_USER\"'/>' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/spring/context-datasource.xml
                 sed -i '16d'  $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/spring/context-datasource.xml
                 sed -i '16i    <property name="password" value='\"$ENCRYPTED_DB_PASSWD\"'/>' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/spring/context-datasource.xml
+
+                DECRYPTED_DB_USER=`$JJOBS_BASE/encrypter.sh d $ENCRYPTED_DB_USER`
+                DECRYPTED_DB_PASSWD=`$JJOBS_BASE/encrypter.sh d $ENCRYPTED_DB_PASSWD`
+                sed -i '29d' $JJOBS_BASE/manager/conf/context.xml
+                sed -i '29i\                         username='\"$DECRYPTED_DB_USER\"' password='\"$DECRYPTED_DB_PASSWD\"' driverClassName="org.postgresql.Driver"' $JJOBS_BASE/manager/conf/context.xml
 
         fi
 

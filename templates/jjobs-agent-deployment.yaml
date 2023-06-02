@@ -36,8 +36,10 @@ spec:
           value: "yes"
         - name: INSTALL_KIND
           value: "A"
-        - name: AGENT_CACHE_DIR
-          value: "/logs001/jjobs/agent-cache"
+        - name: JOB_LOG_APPENDER_LIMIT_COUNT
+          value: "50"
+        - name: STEP_LOG_APPENDER_LIMIT_COUNT
+          value: "50"
         volumeMounts:
         - mountPath: /logs001/jjobs
           name: jjobs-default-log

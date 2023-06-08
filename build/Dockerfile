@@ -54,19 +54,18 @@ ENV ON_BOOT=yes \
 
 # Install Util
 # -------------------------------------------------------------
-RUN yum update; yum clean all
-RUN yum -y install wget
-RUN yum -y install openssh-server openssh-clients
-RUN yum -y install hostname
-RUN yum -y install tar
-RUN yum -y install ncurses
-RUN yum -y install net-tools
-RUN yum -y install zip
-RUN yum -y install unzip
-RUN yum -y install procps
-RUN yum -y install telnet
-RUN yum -y install fontconfig
-RUN yum -y install passwd  #RUN mkdir /var/run/sshd
+RUN yum update; yum clean all \
+    && yum -y install wget \
+    openssh-server openssh-clients \
+    hostname \
+    tar \
+    ncurses \
+    net-tools \
+    zip unzip \
+    procps \
+    telnet \
+    fontconfig \
+    passwd  #RUN mkdir /var/run/sshd
 #RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N ''
 
 # Add User : jjobs
@@ -75,11 +74,11 @@ RUN yum -y install passwd  #RUN mkdir /var/run/sshd
 #RUN useradd jjobs -g jjobs
 #RUN echo 'jjobs1234' | passwd --stdin root
 #RUN echo 'jjobs1234' | passwd --stdin jjobs
-RUN mkdir -p $JJOBS_BASE
-RUN mkdir -p /data001/jjobs
-RUN mkdir -p $LOGS_BASE
-RUN mkdir -p /install
-RUN mkdir -p $WORKING_DIR
+RUN mkdir -p $JJOBS_BASE \
+    && mkdir -p /data001/jjobs \
+    && mkdir -p $LOGS_BASE \
+    && mkdir -p /install \
+    && mkdir -p $WORKING_DIR
 #RUN chown -R jjobs:jjobs $JJOBS_BASE
 #RUN chown -R jjobs:jjobs /data001
 #RUN chown -R jjobs:jjobs $LOGS_BASE
@@ -87,15 +86,15 @@ RUN mkdir -p $WORKING_DIR
 
 # aws-cli
 # -------------------------------------------------------------
-RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip
-RUN unzip awscliv2.zip
-RUN ./aws/install
+RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
+    && unzip awscliv2.zip \
+    && ./aws/install
 
 # kubectl
 # -------------------------------------------------------------
-RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-RUN chmod +x ./kubectl
-RUN mv ./kubectl /usr/local/bin
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
+    && chmod +x ./kubectl \
+    && mv ./kubectl /usr/local/bin
 
 # timezone setting
 RUN ln -snf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
@@ -112,8 +111,8 @@ COPY shell/sample-shell.sh $WORKING_DIR/
 COPY shell/agent-healthcheck.sh $WORKING_DIR/
 COPY installer/jjob_installer_linux_x64.sh /install/
 
-RUN chmod ug+x $WORKING_DIR/*.sh
-RUN chmod ug+x /install/*.sh
+RUN chmod ug+x $WORKING_DIR/*.sh \
+    && chmod ug+x /install/*.sh
 #RUN chown -R jjobs:jjobs $WORKING_DIR
 #RUN chown jjobs:jjobs /entrypoint.sh
 

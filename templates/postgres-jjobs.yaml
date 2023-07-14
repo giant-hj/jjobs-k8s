@@ -1,0 +1,140 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  labels:
+    app: postgres
+data:
+  POSTGRES_PASSWORD: supersecret
+  init: |
+    CREATE TABLE importantdata (
+    id int4 PRIMARY KEY,
+    count int4 NOT NULL
+    );
+
+    INSERT INTO importantdata (id , count) VALUES (1, 0);
+
+    CREATE USER jjobs;
+    ALTER USER jjobs PASSWORD 'jjobs1234';
+    ALTER USER jjobs SUPERUSER;
+    ALTER USER jjobs CREATEDB ;
+    CREATE DATABASE jjobs WITH ENCODING='UTF8' OWNER=jjobs;
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: postgres-pv-volume
+  labels:
+    type: local
+    app: postgres
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 4Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/data"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: postgres-pv-claim
+  labels:
+    app: postgres
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 4Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-external
+  labels:
+    app: postgres
+spec:
+  type: NodePort
+  ports:
+    - port: 5432
+      nodePort: 30001
+  selector:
+   app: postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-lb
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  type: LoadBalancer
+  selector:
+    app: postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  labels:
+    app: postgres
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+   - port: 5432
+  selector:
+   app: postgres    
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  serviceName: postgres
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      terminationGracePeriodSeconds: 5
+      containers:
+        - name: postgres
+          image: postgres:13
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgredb
+            - mountPath: /docker-entrypoint-initdb.d
+              name: init
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "256m"
+            limits:
+              memory: "256Mi"
+              cpu: "512m"
+      volumes:
+        - name: postgredb
+          persistentVolumeClaim:
+            claimName: postgres-pv-claim
+        - name: init
+          configMap:
+            name: postgres-config
+            items:
+            - key: init
+              path: init.sql
+

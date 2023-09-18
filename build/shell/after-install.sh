@@ -11,14 +11,6 @@ if [ "$INSTALL_KIND" == "A" ] || [ "$INSTALL_KIND" == "F" ] ; then
         sed -i 's@log.file.keep.date_cnt=.*$@log.file.keep.date_cnt='"$LOG_KEEP_DATE"'@g' $JJOBS_BASE/agent/app/META-INF/resource.properties
         sed -i 's@log.file.keep.backup_delete_yn=.*$@log.file.keep.backup_delete_yn='"$LOG_DELETE_YN"'@g' $JJOBS_BASE/agent/app/META-INF/resource.properties
 
-        if [ -n "$JOB_LOG_APPENDER_LIMIT_COUNT" ]; then
-                sed -i 's@log.job.appender.limit_count=.*$@log.job.appender.limit_count='"$JOB_LOG_APPENDER_LIMIT_COUNT"'@g' $JJOBS_BASE/agent/app/META-INF/resource.properties
-        fi
-
-        if [ -n "$STEP_LOG_APPENDER_LIMIT_COUNT" ]; then
-                sed -i 's@log.step.appender.limit_count=.*$@log.step.appender.limit_count='"$STEP_LOG_APPENDER_LIMIT_COUNT"'@g' $JJOBS_BASE/agent/app/META-INF/resource.properties
-        fi
-
         cp $WORKING_DIR/agent-healthcheck.sh $JJOBS_BASE/agent/healthcheck.sh
         mkdir -p $JJOBS_BASE/agent/.bin
 fi

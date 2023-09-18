@@ -39,7 +39,7 @@ spec:
         - name: LOG_KEEP_DATE
           value: "10"
         - name: LOG_DELETE_YN
-          value: "Z"
+          value: "Y"
         - name: ON_BOOT
           value: "exceptagent"
         - name: INSTALL_KIND

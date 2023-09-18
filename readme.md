@@ -32,14 +32,24 @@ J-Jobs의 매니저, 서버, 에이전트를 하나의 Pod 안에 설치하고 �
 | SERVER_TCP_PORT    | 17075                                  | J-Job 서버와 에이전트 간의 통신을 위한 TCP Port                                                                                                                                                                          |
 | DB_TYPE            | postgres                               | J-Jobs의 Meta DB 유형<br/>-postgres<br/>-oracle<br/>-mysql<br/>mariadb                                                                                                                                        |
 | JDBC_URL           | jdbc:postgresql://127.0.0.1:7432/jjobs | DB 접속 JDBC URL 설정                                                                                                                                                                                          |
-| DB_USER            | jjobs                                  | 	JDBC URL로 DB에 접속할 때 사용자명                                                                                                                                                                                  |
+| USE_DB_ENCRYPT            | N                                  | 	DB 사용자명, 패스워드 암호화 사용 여부 사용자명                                                                                                                                                                                  |
+| DB_USER            | jjobs                                  | 	JDBC URL로 DB에 접속할 때 사용자명                                                                                                                                                                                    |
 | DB_PASSWD	         | jjobs1234                              | JDBC URL로 DB에 접속할 때 패스워드                                                                                                                                                                                   |
+| ENCRYPTED_DB_USER            | oSAv48QO9j6VAy7mT8YYbA==                                  | 	JDBC URL로 DB에 접속할 때 사용자명<br/>USE_DB_ENCRTPY가 Y 일 때 사용                                                                                                                                                                                  |
+| ENCRYPTED_DB_PASSWD	         | v3bY7QfdJPzTEuxcVWlq3w==                              | JDBC URL로 DB에 접속할 때 패스워드<br/>USE_DB_ENCRTPY가 Y 일 때 사용                                                                                                                                                                              |
 | JJOB_SERVICE_NAME  | jjobs.default.svc.cluster.local        | 전체 설치/서버 설치 시 사용<br/>(start_server.sh 에서 JJOB_SERVER_IP 환경 변수로 "StatefulSet으로 생성된 pod의 hostname + JJOB_SERVICE_NAME"를 추가함)<br/><br/>(예시)<br/>export JJOB_SERVER_IP=jjobs-0.jjobs.default.svc.cluster.local |
 | AGENT_GROUP_ID     | 0                                      | 	에이전트 그룹 ID 설정                                                                                                                                                                                             |
 | LOGS_BASE	         | /logs001/jjobs                         | 	(에이전트 설정) 로그 경로                       |
 | LOG_KEEP_DATE	     | 5                                      | 	(에이전트 설정) 로그 유지 일수                                                                                                                                                                                        |
 | LOG_DELETE_YN      | 	Y                                     | (에이전트 설정) 로그 백업 옵션<br/>-Y : 삭제<br/>-N : 백업<br/>-Z : 백업/압축                                                                                                                                                  |
-| JJOBS_SERVER_IP    | 	127.0.0.1                             | 에이전트가 서버에 접근하기 위한 서버의 서비스 IP<br/><br/>(예시)<br/>start_agent.sh에 들어가는 서버 IP(JJOBS_SERVER_IP)는 서비스 명을 사용해도 됨 → jjobs.default.svc.cluster.local
+| JJOBS_SERVER_IP    | 	127.0.0.1                             | 에이전트가 서버에 접근하기 위한 서버의 서비스 IP<br/><br/>(예시)<br/>start_agent.sh에 들어가는 서버 IP(JJOBS_SERVER_IP)는 서비스 명을 사용해도 됨 → jjobs.default.svc.cluster.local                                                                                                                                                                                        |
+| USE_REDIS_SESSION_CLUSTERING | N                            | 세션 클러스터링을 위한 Redis 사용 여부                                                                                                                                                  |
+| REDIS_NAMESPACE |                             | 세션 클러스터링을 위한 Redis 사용 시 namesapce                                                                                                                                                  |
+| REDIS_HOST |                             | 세션 클러스터링을 위한 Redis 사용 시 host                                                                                                                                                   |
+| REDIS_PORT | 6379                            | 세션 클러스터링을 위한 Redis 사용 시 포트                                                                                                                                                  |
+| ADDITIONAL_JDK_URL | https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz                            | 추가 JDK 설치 필요 시 다운로드 URL(zip, tar.gz, tar 형식 가능)                                                                                                                                                  |
+| ADDITIONAL_JDK_PATH | /home/jjobs/jdk-test                            | 추가 JDK 설치 필요 시 설치 경로                                                                                                                                                  |
+| ADDITIONAL_JDK_FILE_NAME | jdk17.tar.gz                            | 추가 JDK 설치파일 다운로드 파일 명                                                                                                                                                  |
 
 
 #### 매니저/서버를 위한 StatefulSet 구성
@@ -91,7 +101,7 @@ spec:
             - name: LOG_KEEP_DATE
               value: "10"
             - name: LOG_DELETE_YN
-              value: "Z"
+              value: "Y"
             - name: ON_BOOT
               value: "exceptagent"
             - name: INSTALL_KIND
@@ -100,20 +110,6 @@ spec:
               value: "1"
             - name: JJOB_SERVICE_NAME
               value: "jjobs.default.svc.cluster.local"
-            - name: USE_REDIS_SESSION_CLUSTERING
-              value: "N"
-            - name: REDIS_NAMESPACE
-              value: <input_your_redis_namespace>
-            - name: REDIS_HOST
-              value: <input_your_redis_host>
-            - name: REDIS_PORT
-              value: "6379"
-            - name: USE_DB_ENCRYPT
-              value: "Y"
-            - name: ENCRYPTED_DB_USER
-              value: <input_your_db_encrypted_username>
-            - name: ENCRYPTED_DB_PASSWD
-              value: <input_your_db_encrypted_password>
           ports:
             - containerPort: 7065
             - containerPort: 7075

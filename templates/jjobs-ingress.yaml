@@ -14,7 +14,7 @@ data:
   DB_PASSWD: <input_your_db_password>
   LOGS_BASE: "/logs001/jjobs"
   LOG_KEEP_DATE: "10"
-  LOG_DELETE_YN: "Z"
+  LOG_DELETE_YN: "Y"
   ON_BOOT: "yes"
   INSTALL_KIND: "F"
   AGENT_GROUP_ID: "1"

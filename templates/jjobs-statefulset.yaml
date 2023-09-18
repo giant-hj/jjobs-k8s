@@ -48,20 +48,6 @@ spec:
           value: "1"
         - name: JJOB_SERVICE_NAME
           value: "jjobs.default.svc.cluster.local"
-        - name: USE_REDIS_SESSION_CLUSTERING
-          value: "N"
-        - name: REDIS_NAMESPACE
-          value: <input_your_redis_namespace>
-        - name: REDIS_HOST
-          value: <input_your_redis_host>
-        - name: REDIS_PORT
-          value: "6379"
-        - name: USE_DB_ENCRYPT
-          value: "Y"
-        - name: ENCRYPTED_DB_USER
-          value: <input_your_db_encrypted_username>
-        - name: ENCRYPTED_DB_PASSWD
-          value: <input_your_db_encrypted_password>
         ports:
         - containerPort: 7065
         - containerPort: 7075

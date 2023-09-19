@@ -114,16 +114,27 @@ if [ "$INSTALL_KIND" == "M" ] || [ "$INSTALL_KIND" == "F" ] ; then
         sed -i '322inetworkaddress.cache.negative.ttl=3' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security
 fi
 
-if [ "$ADDITIONAL_JDK_URL" ] && [ "$ADDITIONAL_JDK_PATH" ] && [ "$ADDITIONAL_JDK_FILE_NAME" ] ; then
-        mkdir -p $ADDITIONAL_JDK_PATH
-        wget $ADDITIONAL_JDK_URL -O $ADDITIONAL_JDK_FILE_NAME 
-        echo "unarchive Additional JDK FIle :: $ADDITIONAL_JDK_FILE_NAME"
-        if [[ "$ADDITIONAL_JDK_FILE_NAME" == *.tar.gz ]]; then                tar -zxvf $ADDITIONAL_JDK_FILE_NAME -C $ADDITIONAL_JDK_PATH 
-        elif [[ "$ADDITIONAL_JDK_FILE_NAME" == *.tar ]]; then                tar -xvf $ADDITIONAL_JDK_FILE_NAME -C $ADDITIONAL_JDK_PATH
-        elif [[ "$ADDITIONAL_JDK_FILE_NAME" == *.zip ]]; then                unzip $ADDITIONAL_JDK_FILE_NAME -d $ADDITIONAL_JDK_PATH
-        else
-                echo "Unsupported JDK File type."
-        fi
+if [ "$WGET_URL" ] && [ "$WGET_FOLDER_PATH" ] && [ "$WGET_FILE_NAME" ] ; then
+        mkdir -p $WGET_FOLDER_PATH
+        wget $WGET_URL -O $WGET_FOLDER_PATH/$WGET_FILE_NAME
 
-        rm $ADDITIONAL_JDK_FILE_NAME
+        if [[ "$WGET_FILE_NAME" == *.tar.gz ]]; then
+                echo "unarchive .tar.gz File :: $WGET_FILE_NAME"
+                tar -zxvf $WGET_FOLDER_PATH/$WGET_FILE_NAME
+                echo "unarchive successfully completed."
+                echo "Delete Archive File :: $WGET_FILE_NAME"
+                rm $WGET_FOLDER_PATH/$WGET_FILE_NAME
+        elif [[ "$WGET_FILE_NAME" == *.tar ]]; then
+                echo "unarchive .tar File :: $WGET_FILE_NAME"
+                tar -xvf $WGET_FOLDER_PATH/$WGET_FILE_NAME
+                echo "unarchive successfully completed."
+                echo "Delete Archive File :: $WGET_FILE_NAME"
+                rm $WGET_FOLDER_PATH/$WGET_FILE_NAME
+        elif [[ "$WGET_FILE_NAME" == *.zip ]]; then
+                echo "unarchive .zip File :: $WGET_FILE_NAME"
+                unzip $WGET_FOLDER_PATH/$WGET_FILE_NAME
+                echo "unarchive successfully completed."
+                echo "Delete Archive File :: $WGET_FILE_NAME"
+                rm $WGET_FOLDER_PATH/$WGET_FILE_NAME
+        fi
 fi

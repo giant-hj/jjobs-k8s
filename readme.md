@@ -47,9 +47,9 @@ J-Jobs의 매니저, 서버, 에이전트를 하나의 Pod 안에 설치하고 �
 | REDIS_NAMESPACE |                             | 세션 클러스터링을 위한 Redis 사용 시 namesapce                                                                                                                                                  |
 | REDIS_HOST |                             | 세션 클러스터링을 위한 Redis 사용 시 host                                                                                                                                                   |
 | REDIS_PORT | 6379                            | 세션 클러스터링을 위한 Redis 사용 시 포트                                                                                                                                                  |
-| ADDITIONAL_JDK_URL | https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz                            | 추가 JDK 설치 필요 시 다운로드 URL(zip, tar.gz, tar 형식 가능)                                                                                                                                                  |
-| ADDITIONAL_JDK_PATH | /home/jjobs/jdk-test                            | 추가 JDK 설치 필요 시 설치 경로                                                                                                                                                  |
-| ADDITIONAL_JDK_FILE_NAME | jdk17.tar.gz                            | 추가 JDK 설치파일 다운로드 파일 명                                                                                                                                                  |
+| WGET_URL | https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz                            | 추가 APP 설치 필요 시 다운로드 URL<br/>zip, tar.gz, tar 형식의 경우 다운로드 후 WGET_FOLDER_PATH 경로에 압축 해제함                                                                                                                                                  |
+| WGET_FOLDER_PATH | /home/jjobs/jdk-test                            | 추가 APP 설치 필요 시 설치 경로                                                                                                                                                  |
+| WGET_FILE_NAME | jdk17.tar.gz                            | 추가 APP 다운로드 파일명                                                                                                                                                  |
 
 
 #### 매니저/서버를 위한 StatefulSet 구성

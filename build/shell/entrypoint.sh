@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-if [ "$ON_BOOT" == "yes" ] || [ "$ON_BOOT" == "manual" ] || [ "$ON_BOOT" == "manager" ] || [ "$ON_BOOT" == "exceptagent" ]
+if [ "$ON_BOOT" == "yes" ] || [ "$ON_BOOT" == "y" ] || [ "$ON_BOOT" == "manual" ] || [ "$ON_BOOT" == "manager" ] || [ "$ON_BOOT" == "exceptagent" ]
 then
   if [ "$INSTALL_KIND" == "A" ]
   then
@@ -13,7 +13,7 @@ then
   sleep 1
   . $WORKING_DIR/after-install.sh
 
-  if [ "$ON_BOOT" == "yes" ]; then
+  if [ "$ON_BOOT" == "yes" ] || [ "$ON_BOOT" == "y" ]; then
     if [ "$INSTALL_KIND" == "A" ]; then
       . $JJOBS_BASE/start_agent.sh &
     elif [ "$INSTALL_KIND" == "S" ]; then

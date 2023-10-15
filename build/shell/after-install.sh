@@ -118,6 +118,8 @@ if [ "$WGET_URL" ] && [ "$WGET_FOLDER_PATH" ] && [ "$WGET_FILE_NAME" ] ; then
         mkdir -p $WGET_FOLDER_PATH
         wget $WGET_URL -O $WGET_FOLDER_PATH/$WGET_FILE_NAME
 
+        cd $WGET_FOLDER_PATH
+
         if [[ "$WGET_FILE_NAME" == *.tar.gz ]]; then
                 echo "unarchive .tar.gz File :: $WGET_FILE_NAME"
                 tar -zxvf $WGET_FOLDER_PATH/$WGET_FILE_NAME

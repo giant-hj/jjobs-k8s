@@ -107,6 +107,10 @@ if [ "$INSTALL_KIND" == "M" ] || [ "$INSTALL_KIND" == "F" ] ; then
 	echo "edit start_manager.sh"
 	sed -i "5d" $JJOBS_BASE/start_manager.sh
 
+        if [ -n "$SSO_KEYCLOAK_ISSUER_URI" ]; then
+                sed -i '3iexport SSO_KEYCLOAK_ISSUER_URI='$SSO_KEYCLOAK_ISSUER_URI'' start_manager.sh
+        fi
+
         echo "setting for java security.."
         sed -i '307d' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security
         sed -i '307inetworkaddress.cache.ttl=1' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security

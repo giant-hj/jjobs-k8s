@@ -26,7 +26,7 @@ J-Jobs의 매니저, 서버, 에이전트를 하나의 Pod 안에 설치하고 �
 | Key                | Default value                          | Description                                                                                                                                                                                                |
 |--------------------|----------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | INSTALL_KIND       | F                                      | J-Jobs 설치 유형<br/> - F : 전체 설치<br/>- M : Manager 단독 설치<br/>- S : Server 단독 설치<br/>- A : Agent 단독 설치                                                                                                         |
-| ON_BOOT            | yes                                    | 설치 & 구동 관련 옵션<br/> -yes : 설치 후 모두 기동<br/>- manual : 설치 후 기동은 Pod에 접속하여 직접 수행(초기 설치 시 사용)<br/>- manager : 설치 후 매니저만 기동(초기 설치 시 사용)<br/>- no (기타) : 설치 및 기동 모두 하지 않음 <br/>- exceptagent : 에이전트 제외한 매니저, 서버 기동    |
+| ON_BOOT            | yes (or y)                                   | 설치 & 구동 관련 옵션<br/> -yes (or y) : 설치 후 모두 기동<br/>- manual : 설치 후 기동은 Pod에 접속하여 직접 수행(초기 설치 시 사용)<br/>- manager : 설치 후 매니저만 기동(초기 설치 시 사용)<br/>- no (기타) : 설치 및 기동 모두 하지 않음 <br/>- exceptagent : 에이전트 제외한 매니저, 서버 기동    |
 | MANAGER_WEB_PORT   | 7065                                   | J-Jobs 매니저 web(was) port                                                                                                                                                                                   |
 | SERVER_WEB_PORT    | 7075                                   | J-Jobs 서버 web(was) port                                                                                                                                                                                    |
 | SERVER_TCP_PORT    | 17075                                  | J-Job 서버와 에이전트 간의 통신을 위한 TCP Port                                                                                                                                                                          |
@@ -233,7 +233,7 @@ http://{externalIP}:7065/jjob-manager
 - 이중화 구성의 경우, 서버 설정 화면에서 1-2 서버 정보 등록함
 - 서버 IP는 Headless Service(Pod DNS) 주소로 설정
 - J-Jobs 매니저/서버 이중화 구성 시 Pod 추가
-- ConfigMap의 `ON_BOOT` 설정을 yes로 수정하여 반영
+- ConfigMap의 `ON_BOOT` 설정을 yes(또는 y)로 수정하여 반영
 - StatefulSet의 replica 개수를 2로 수정하여 반영
 - 서버 1-2 상태 확인
 

@@ -20,12 +20,13 @@ if [ "$INSTALL_KIND" == "S" ] || [ "$INSTALL_KIND" == "F" ] ; then
         unzip $JJOBS_BASE/server/webapps/jjob-server.war -d $JJOBS_BASE/server/webapps/jjob-server
 
         echo "server log setting"
+        mkdir -p $LOGS_BASE
         sed -i "52d" $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/properties/log4j2.xml
         sed -i "7d" $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/properties/log4j2.xml
         sed -i '/<AppenderRef ref="console/d' $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/properties/log4j2.xml
         sed -i 's@<!--@@g' $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/properties/log4j2.xml
         sed -i 's@-->@@g' $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/properties/log4j2.xml
-        sed -i 's/\/logs001\/jjobs\/server/\/logs001\/jjobs\/server\/'"$HOSTNAME"'/g' $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/properties/log4j2.xml
+        sed -i 's@/logs001/jjobs/server@'"$LOGS_BASE"'/server/'"$HOSTNAME"'@g' $JJOBS_BASE/server/webapps/jjob-server/WEB-INF/classes/properties/log4j2.xml
 
         if [ "$USE_DB_ENCRYPT" == "Y" ] && [ -n "$ENCRYPTED_DB_USER" ] && [ -n "$ENCRYPTED_DB_PASSWD" ] ; then
                 echo "meta db encryption setting"
@@ -48,7 +49,13 @@ if [ "$INSTALL_KIND" == "S" ] || [ "$INSTALL_KIND" == "F" ] ; then
         INT=$((id))
         SERVER_ID=$(($INT + 1))
         sed -i 's@export JJOB_SERVER_ID=.*$@export JJOB_SERVER_ID=1-'"$SERVER_ID"'@g' $JJOBS_BASE/start_server.sh
-        sed -i 's@tail -f /engn001/jjobs/server/logs/catalina.out$@tail -f /logs001/jjobs/server/server.log@g' $JJOBS_BASE/start_server.sh
+        sed -i 's@tail -f /engn001/jjobs/server/logs/catalina.out@if [ ! -e $LOGS_BASE/server/$HOSTNAME/server.log ]; then\
+    sleep 10\
+fi\
+if [ ! -e $LOGS_BASE/server/$HOSTNAME/server.log ]; then\
+    sleep 10\
+fi\
+tail -f $LOGS_BASE/server/$HOSTNAME/server.log@g' $JJOBS_BASE/start_server.sh
 
         if [ -z "$JJOB_SERVICE_NAME" ]; then
           echo "skip to set the JJOB_SERVER_IP"
@@ -73,7 +80,7 @@ if [ "$INSTALL_KIND" == "M" ] || [ "$INSTALL_KIND" == "F" ] ; then
         sed -i '/<AppenderRef ref="console/d' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/properties/log4j2.xml
         sed -i 's@<!--@@g' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/properties/log4j2.xml
         sed -i 's@-->@@g' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/properties/log4j2.xml
-        sed -i 's/\/logs001\/jjobs\/manager/\/logs001\/jjobs\/manager\/'"$HOSTNAME"'/g' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/properties/log4j2.xml
+        sed -i 's@/logs001/jjobs/manager@'"$LOGS_BASE"'/manager/'"$HOSTNAME"'@g' $JJOBS_BASE/manager/webapps/jjob-manager/WEB-INF/classes/properties/log4j2.xml
 
         if [ "$USE_REDIS_SESSION_CLUSTERING" == "Y" ] && [ -n "$REDIS_NAMESPACE" ] && [ -n "$REDIS_HOST" ] && [ -n "$REDIS_PORT" ]; then
                 echo "manager xml setting for redis"

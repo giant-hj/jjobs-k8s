@@ -12,61 +12,102 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: jjobs
-    spec:      
-      terminationGracePeriodSeconds: 180
+    spec:
+      terminationGracePeriodSeconds: 36000
       containers:
-      - name: jjobs
-        image: devonlab/jjobs
-        env:
-        - name: MANAGER_WEB_PORT
-          value: "7065"
-        - name: SERVER_WEB_PORT
-          value: "7075"
-        - name: SERVER_TCP_PORT
-          value: "17075"
-        - name: DB_TYPE
-          value: <input_your_db_type>
-        - name: JDBC_URL
-          value: <input_your_jdbc_url>
-        - name: JDBC_PARAMETERS
-          value: <input_your_jdbc_parameters>
-        - name: DB_USER
-          value: <input_your_db_username>
-        - name: DB_PASSWD
-          value: <input_your_db_password>
-        - name: LOGS_BASE
-          value: "/logs001/jjobs"
-        - name: LOG_KEEP_DATE
-          value: "10"
-        - name: LOG_DELETE_YN
-          value: "Y"
-        - name: ON_BOOT
-          value: "exceptagent"
-        - name: INSTALL_KIND
-          value: "F"
-        - name: AGENT_GROUP_ID
-          value: "1"
-        - name: JJOB_SERVICE_NAME
-          value: "jjobs.default.svc.cluster.local"
-        ports:
-        - containerPort: 7065
-        - containerPort: 7075
-        - containerPort: 17075
-        - containerPort: 17076
-        - containerPort: 17077
-        - containerPort: 17078
-        - containerPort: 17079
-        volumeMounts:
-        - mountPath: /logs001/jjobs
-          name: jjobs-logs
-        resources:
-          requests:
-            memory: "1024Mi"
-            cpu: "1"
-          limits:
-            memory: "2048Mi"
-            cpu: "2"
+        - name: jjobs
+          image: devonlab/jjobs
+          imagePullPolicy: Always
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - /pre-stop.sh
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - /post-start.sh
+          env:
+            - name: MANAGER_WEB_PORT
+              value: "7065"
+            - name: SERVER_WEB_PORT
+              value: "7075"
+            - name: SERVER_TCP_PORT
+              value: "17075"
+            - name: DB_TYPE
+              value: <input_your_db_type>
+            - name: JDBC_URL
+              value: <input_your_jdbc_url>
+            - name: JDBC_PARAMETERS
+              value: <input_your_jdbc_parameters>
+            - name: DB_USER
+              value: <input_your_db_username>
+            - name: DB_PASSWD
+              value: <input_your_db_password>
+            - name: LOGS_BASE
+              value: "/logs001/jjobs"
+            - name: LOG_KEEP_DATE
+              value: "10"
+            - name: LOG_DELETE_YN
+              value: "Y"
+            - name: ON_BOOT
+              value: "exceptagent"
+            - name: INSTALL_KIND
+              value: "F"
+            - name: AGENT_GROUP_ID
+              value: "1"
+            - name: JJOB_SERVICE_NAME
+              value: "jjobs.default.svc.cluster.local"
+            - name: API_PRIVATE_TOKEN
+              value: <input_your_api_user_private_token>
+                #- name: USE_REDIS_SESSION_CLUSTERING
+                #value: "N"
+                #- name: REDIS_NAMESPACE
+                #value: ""
+                #- name: REDIS_HOST
+                #value: ""
+                #- name: REDIS_PORT
+                #value: "6379"
+                #- name: USE_DB_ENCRYPT
+                #value: "N"
+                #- name: ENCRYPTED_DB_USER
+                #value: ""
+                #- name: ENCRYPTED_DB_PASSWD
+                #value: ""
+                #- name: WGET_URL
+                #value: "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz"
+                #- name: WGET_FOLDER_PATH
+                #value: "/home/jjobs/jdk-test"
+                #- name: WGET_FILE_NAME
+                #value: "jdk17.tar.gz"
+                #- name: SSO_KEYCLOAK_ISSUER_URI
+              #value: "https://keycloak.am-platform.devonlab.io/realms/playcekube"
+          ports:
+            - containerPort: 7065
+            - containerPort: 7075
+            - containerPort: 17075
+            - containerPort: 17076
+            - containerPort: 17077
+            - containerPort: 17078
+            - containerPort: 17079
+          volumeMounts:
+            - mountPath: /logs001/jjobs
+              name: jjobs-logs
+          resources:
+            requests:
+              memory: "1024Mi"
+              cpu: "1"
+            limits:
+              memory: "2048Mi"
+              cpu: "2"
       volumes:
-      - name: jjobs-logs
-        persistentVolumeClaim:
-          claimName: efs-pvc-fargate-ms
+        - name: jjobs-logs
+          persistentVolumeClaim:
+            claimName: jjobs-nfs-pvc

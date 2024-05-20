@@ -18,9 +18,9 @@ spec:
         - name: jjobs
           image: devonlab/jjobs
           imagePullPolicy: Always
-          securityContext:
-            capabilities:
-              add: ["NET_ADMIN"]
+          #securityContext:
+            #capabilities:
+              #add: ["NET_ADMIN"]
           lifecycle:
             preStop:
               exec:
@@ -67,28 +67,6 @@ spec:
               value: "jjobs.default.svc.cluster.local"
             - name: API_PRIVATE_TOKEN
               value: <input_your_api_user_private_token>
-                #- name: USE_REDIS_SESSION_CLUSTERING
-                #value: "N"
-                #- name: REDIS_NAMESPACE
-                #value: ""
-                #- name: REDIS_HOST
-                #value: ""
-                #- name: REDIS_PORT
-                #value: "6379"
-                #- name: USE_DB_ENCRYPT
-                #value: "N"
-                #- name: ENCRYPTED_DB_USER
-                #value: ""
-                #- name: ENCRYPTED_DB_PASSWD
-                #value: ""
-                #- name: WGET_URL
-                #value: "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz"
-                #- name: WGET_FOLDER_PATH
-                #value: "/home/jjobs/jdk-test"
-                #- name: WGET_FILE_NAME
-                #value: "jdk17.tar.gz"
-                #- name: SSO_KEYCLOAK_ISSUER_URI
-              #value: "https://keycloak.am-platform.devonlab.io/realms/playcekube"
           ports:
             - containerPort: 7065
             - containerPort: 7075

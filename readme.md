@@ -23,34 +23,41 @@ J-Jobs의 매니저, 서버, 에이전트를 하나의 Pod 안에 설치하고 �
 초기 설치 시에는 `ON_BOOT` 설정을 'manual' 또는 'manager'로 설정하고, 설치가 종료된 이후에 'yes'로 변경하여 사용한다.
 해당 설정은 statefulset manifest의 환경 변수(`.spec.template.spec.containers[].env`)로 관리한다.
 
-| Key                | Default value                          | Description                                                                                                                                                                                                |
-|--------------------|----------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| INSTALL_KIND       | F                                      | J-Jobs 설치 유형<br/> - F : 전체 설치<br/>- M : Manager 단독 설치<br/>- S : Server 단독 설치<br/>- A : Agent 단독 설치                                                                                                         |
-| ON_BOOT            | yes (or y)                                   | 설치 & 구동 관련 옵션<br/> -yes (or y) : 설치 후 모두 기동<br/>- manual : 설치 후 기동은 Pod에 접속하여 직접 수행(초기 설치 시 사용)<br/>- manager : 설치 후 매니저만 기동(초기 설치 시 사용)<br/>- no (기타) : 설치 및 기동 모두 하지 않음 <br/>- exceptagent : 에이전트 제외한 매니저, 서버 기동    |
-| MANAGER_WEB_PORT   | 7065                                   | J-Jobs 매니저 web(was) port                                                                                                                                                                                   |
-| SERVER_WEB_PORT    | 7075                                   | J-Jobs 서버 web(was) port                                                                                                                                                                                    |
-| SERVER_TCP_PORT    | 17075                                  | J-Job 서버와 에이전트 간의 통신을 위한 TCP Port                                                                                                                                                                          |
-| DB_TYPE            | postgres                               | J-Jobs의 Meta DB 유형<br/>-postgres<br/>-oracle<br/>-mysql<br/>mariadb                                                                                                                                        |
-| JDBC_URL           | jdbc:postgresql://127.0.0.1:7432/jjobs | DB 접속 JDBC URL 설정                                                                                                                                                                                          |
-| USE_DB_ENCRYPT            | N                                  | 	DB 사용자명, 패스워드 암호화 사용 여부 사용자명                                                                                                                                                                                  |
-| DB_USER            | jjobs                                  | 	JDBC URL로 DB에 접속할 때 사용자명                                                                                                                                                                                    |
-| DB_PASSWD	         | jjobs1234                              | JDBC URL로 DB에 접속할 때 패스워드                                                                                                                                                                                   |
-| ENCRYPTED_DB_USER            | oSAv48QO9j6VAy7mT8YYbA==                                  | 	JDBC URL로 DB에 접속할 때 사용자명<br/>USE_DB_ENCRTPY가 Y 일 때 사용                                                                                                                                                                                  |
-| ENCRYPTED_DB_PASSWD	         | v3bY7QfdJPzTEuxcVWlq3w==                              | JDBC URL로 DB에 접속할 때 패스워드<br/>USE_DB_ENCRTPY가 Y 일 때 사용                                                                                                                                                                              |
-| JJOB_SERVICE_NAME  | jjobs.default.svc.cluster.local        | 전체 설치/서버 설치 시 사용<br/>(start_server.sh 에서 JJOB_SERVER_IP 환경 변수로 "StatefulSet으로 생성된 pod의 hostname + JJOB_SERVICE_NAME"를 추가함)<br/><br/>(예시)<br/>export JJOB_SERVER_IP=jjobs-0.jjobs.default.svc.cluster.local |
-| AGENT_GROUP_ID     | 0                                      | 	에이전트 그룹 ID 설정                                                                                                                                                                                             |
-| LOGS_BASE	         | /logs001/jjobs                         | 	(에이전트 설정) 로그 경로                       |
-| LOG_KEEP_DATE	     | 5                                      | 	(에이전트 설정) 로그 유지 일수                                                                                                                                                                                        |
-| LOG_DELETE_YN      | 	Y                                     | (에이전트 설정) 로그 백업 옵션<br/>-Y : 삭제<br/>-N : 백업<br/>-Z : 백업/압축                                                                                                                                                  |
-| JJOBS_SERVER_IP    | 	127.0.0.1                             | 에이전트가 서버에 접근하기 위한 서버의 서비스 IP<br/><br/>(예시)<br/>start_agent.sh에 들어가는 서버 IP(JJOBS_SERVER_IP)는 서비스 명을 사용해도 됨 → jjobs.default.svc.cluster.local                                                                                                                                                                                        |
-| USE_REDIS_SESSION_CLUSTERING | N                            | 세션 클러스터링을 위한 Redis 사용 여부                                                                                                                                                  |
-| REDIS_NAMESPACE |                             | 세션 클러스터링을 위한 Redis 사용 시 namesapce                                                                                                                                                  |
-| REDIS_HOST |                             | 세션 클러스터링을 위한 Redis 사용 시 host                                                                                                                                                   |
-| REDIS_PORT | 6379                            | 세션 클러스터링을 위한 Redis 사용 시 포트                                                                                                                                                  |
-| WGET_URL | https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz                            | 추가 APP 설치 필요 시 다운로드 URL<br/>zip, tar.gz, tar 형식의 경우 다운로드 후 WGET_FOLDER_PATH 경로에 압축 해제함                                                                                                                                                  |
-| WGET_FOLDER_PATH | /home/jjobs/jdk-test                            | 추가 APP 설치 필요 시 설치 경로                                                                                                                                                  |
-| WGET_FILE_NAME | jdk17.tar.gz                            | 추가 APP 다운로드 파일명                                                                                                                                                  |
+| Key                  | Default value                          | Description                                                                                                                                                                                                    |
+|----------------------|----------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| INSTALL_KIND         | F                                      | J-Jobs 설치 유형<br/> - F : 전체 설치<br/>- M : Manager 단독 설치<br/>- S : Server 단독 설치<br/>- A : Agent 단독 설치                                                                                                             |
+| ON_BOOT              | yes (or y)                                   | 설치 & 구동 관련 옵션<br/> -yes (or y) : 설치 후 모두 기동<br/>- manual : 설치 후 기동은 Pod에 접속하여 직접 수행(초기 설치 시 사용)<br/>- manager : 설치 후 매니저만 기동(초기 설치 시 사용)<br/>- no (기타) : 설치 및 기동 모두 하지 않음 <br/>- exceptagent : 에이전트 제외한 매니저, 서버 기동 |
+| MANAGER_WEB_PORT     | 7065                                   | J-Jobs 매니저 web(was) port                                                                                                                                                                                       |
+| SERVER_WEB_PORT      | 7075                                   | J-Jobs 서버 web(was) port                                                                                                                                                                                        |
+| SERVER_TCP_PORT      | 17075                                  | J-Job 서버와 에이전트 간의 통신을 위한 TCP Port                                                                                                                                                                              |
+| DB_TYPE              | postgres                               | J-Jobs의 Meta DB 유형<br/>-postgres<br/>-oracle<br/>-mysql<br/>mariadb                                                                                                                                            |
+| JDBC_URL             | jdbc:postgresql://127.0.0.1:7432/jjobs | DB 접속 JDBC URL 설정                                                                                                                                                                                              |
+| USE_DB_ENCRYPT       | N                                  | 	DB 사용자명, 패스워드 암호화 사용 여부 사용자명                                                                                                                                                                                  |
+| DB_USER              | jjobs                                  | 	JDBC URL로 DB에 접속할 때 사용자명                                                                                                                                                                                      |
+| DB_PASSWD	           | jjobs1234                              | JDBC URL로 DB에 접속할 때 패스워드                                                                                                                                                                                       |
+| ENCRYPTED_DB_USER    | oSAv48QO9j6VAy7mT8YYbA==                                  | 	JDBC URL로 DB에 접속할 때 사용자명<br/>USE_DB_ENCRTPY가 Y 일 때 사용                                                                                                                                                         |
+| ENCRYPTED_DB_PASSWD	 | v3bY7QfdJPzTEuxcVWlq3w==                              | JDBC URL로 DB에 접속할 때 패스워드<br/>USE_DB_ENCRTPY가 Y 일 때 사용                                                                                                                                                          |
+| JJOB_SERVICE_NAME    | jjobs.default.svc.cluster.local        | 전체 설치/서버 설치 시 사용<br/>(start_server.sh 에서 JJOB_SERVER_IP 환경 변수로 "StatefulSet으로 생성된 pod의 hostname + JJOB_SERVICE_NAME"를 추가함)<br/><br/>(예시)<br/>export JJOB_SERVER_IP=jjobs-0.jjobs.default.svc.cluster.local     |
+| AGENT_GROUP_ID       | 0                                      | 	에이전트 그룹 ID 설정                                                                                                                                                                                                 |
+| LOGS_BASE	           | /logs001/jjobs                         | 	(에이전트 설정) 로그 경로                                                                                                                                                                                               |
+| LOG_KEEP_DATE	       | 5                                      | 	(에이전트 설정) 로그 유지 일수                                                                                                                                                                                            |
+| LOG_DELETE_YN        | 	Y                                     | (에이전트 설정) 로그 백업 옵션<br/>-Y : 삭제<br/>-N : 백업<br/>-Z : 백업/압축                                                                                                                                                      |
+| JJOBS_SERVER_IP      | 	127.0.0.1                             | 에이전트가 서버에 접근하기 위한 서버의 서비스 IP<br/><br/>(예시)<br/>start_agent.sh에 들어가는 서버 IP(JJOBS_SERVER_IP)는 서비스 명을 사용해도 됨 → jjobs.default.svc.cluster.local                                                                    |
+| API_PRIVATE_TOKEN    | 26da841583291d1b6ef7                            | `preStop`, `postStart` 훅에 사용할 J-Jobs 사용자의 비밀 토큰                                                                                                                                                                |
+| WGET_URL             | https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz                            | 추가 APP 설치 필요 시 다운로드 URL<br/>zip, tar.gz, tar 형식의 경우 다운로드 후 WGET_FOLDER_PATH 경로에 압축 해제함                                                                                                                         |
+| WGET_FOLDER_PATH     | /home/jjobs/jdk-test                            | 추가 APP 설치 필요 시 설치 경로                                                                                                                                                                                           |
+| WGET_FILE_NAME       | jdk17.tar.gz                            | 추가 APP 다운로드 파일명                                                                                                                                                                                                |
 
+#### Graceful shutdown 설정
+재기동, 버전 업그레이드 등으로 pod의 종료/기동이 필요한 경우 Job 실행 정보의 정합성 유지를 위해 jjob-server와 Agent 종료 이후 pod를 종료하는것을 권장한다.
+- jjob-server: 서버에서 처리중인 job이 없을 때, jjob-server가 설치된 pod 내부의 stop_server.sh 스크립트 수행 후 pod 종료
+- Agent: jjob-manager에 admin 계정으로 로그인 > 시스템설정 > 에이전트설정 메뉴에서 종료하려는 에이전트의 에이전트 일시정지 & 중지 버튼을 클릭하여, 실행중인 Job이 모두 처리완료된 후 Agent 프로세스 종료
+
+위 작업을 매니저/서버 Statefulset과 Agent Statefulset 설정을 통해 자동화할 수 있다.
+- `spec.template.spec.containers.lifecycle.preStop` : 컨테이너가 종료되기 직전 호출되는 명령어로, 위에서 설명한 매니저/서버/Agent가 권장 상태로 종료되도록 확인하고, pod를 삭제하도록 구성된 pre-stop.sh 파일이 호출된다.
+- `spec.template.spec.containers.lifecycle.postStart` : 컨테이너가 생성된 직후 호출되는 명령어로, 서비스 정상 기동 확인 및 일시정지된 서버/에이전트를 재개하는 post-start.sh 파일이 호출된다.
+- `.spec.template.spec.terminationGracePeriodSeconds` : preStop 훅이 실행될 수 있는 충분한 유예(처리중인 Job이 완료될 수 있는)시간을 정의한다. 해당 시간이 경과되면 처리중인 Job이 있더라도 Pod가 종료된다.
+- 초기 설치 시에는 `preStop`과 `postStart` 훅에서 사용할 `API_PRIVATE_TOKEN`을 정의할 수 없으므로, Graceful shutdown 설정을 구성하지 않고 설치한다. 
 
 #### 매니저/서버를 위한 StatefulSet 구성
 - 초기 설치 시에는 replica 1로 설정하여 StatefulSet 생성
@@ -75,10 +82,24 @@ spec:
       labels:
         app.kubernetes.io/name: jjobs
     spec:
-      terminationGracePeriodSeconds: 180
+      terminationGracePeriodSeconds: 36000
       containers:
         - name: jjobs
-          image: devonlab/jjobs
+          image: devonlab/jjobs:latest
+          imagePullPolicy: Always
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/bash
+                  - -c
+                  - /pre-stop.sh
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - /post-start.sh
           env:
             - name: MANAGER_WEB_PORT
               value: "7065"
@@ -110,6 +131,8 @@ spec:
               value: "1"
             - name: JJOB_SERVICE_NAME
               value: "jjobs.default.svc.cluster.local"
+            - name: API_PRIVATE_TOKEN
+              value: <input_your_api_user_private_token>
           ports:
             - containerPort: 7065
             - containerPort: 7075
@@ -268,14 +291,23 @@ spec:
       labels:
         app: jjobs-agent
     spec:
-      terminationGracePeriodSeconds: 300
+      terminationGracePeriodSeconds: 36000
       containers:
       - name: jjobs-agent-container
-        image: devonlab/jjobs:keycloak
+        image: devonlab/jjobs:latest
         lifecycle:
           preStop:
             exec:
-              command: ["/bin/sh","-c","kubectl delete pods $HOSTNAME --force"]
+              command:
+                - /bin/bash
+                - -c
+                - /pre-stop.sh
+          postStart:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - /post-start.sh
         env:
         - name: AGENT_GROUP_ID
           value: "1"
@@ -293,6 +325,8 @@ spec:
           value: "yes"
         - name: INSTALL_KIND
           value: "A"
+        - name: API_PRIVATE_TOKEN
+          value: <input_your_api_user_private_token>
         volumeMounts:
         - mountPath: /logs001/jjobs
           name: jjobs-default-log
@@ -325,7 +359,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: efs-jjobs
-    namespace: default
+  namespace: default
   labels:
     app: jjobs-agent
   annotations:

@@ -1,3 +1,4 @@
+#!/bin/sh
 #install kind: M => Do nothing
 #install kind: S && ON_BOOT: yes or y or exeptagent => Server gracefully stop
 #install kind: A && ON_BOOT: yes or y =>  Agent gracefully stop
@@ -18,7 +19,32 @@ then
 	fi
 fi
 
-if [ "$STOP_SERVER" == "Y" ]
+#check server status
+pid="$(ps -ef | grep $JJOBS_BASE/server | grep -v "grep" | awk '{print $2}')"
+echo "Running PID: {$pid}"
+echo $(TZ="Asia/Seoul" date +'%Y-%m-%d %T')
+if [ -z "$pid" ]
+then
+	SERVER_STATUS="STOPPED"
+else
+	SERVER_STATUS="RUNNING"
+fi
+sleep 1;
+
+#check agent status
+pid="$(ps -ef | grep cname=jjobs | grep -v "grep" | awk '{print $2}')"
+echo "Running PID: {$pid}"
+echo $(TZ="Asia/Seoul" date +'%Y-%m-%d %T')
+if [ -z "$pid" ]
+then
+	AGENT_STATUS="STOPPED"
+else
+	AGENT_STATUS="RUNNING"
+fi
+sleep 1;
+
+
+if [ "$STOP_SERVER" == "Y" ] && [ "$SERVER_STATUS" == "RUNNING" ]
 then
 	#1. Server gracefully stop
 	#1-1. Get Server ID
@@ -35,7 +61,7 @@ then
 	http://$JJOB_SERVICE_NAME:$JJOB_MANAGER_SERVICE_PORT/jjob-manager/api/v1/serversetting/server/hold
 fi
 
-if [ "$STOP_AGENT" == "Y" ]
+if [ "$STOP_AGENT" == "Y" ] && [ "$AGENT_STATUS" == "RUNNING" ]
 then
 	#2. Agent gracefully stop
 	#2-1. Agent hold and stop
@@ -46,7 +72,7 @@ then
 	${JJOB_MANAGER_PORT/tcp:/http:}/jjob-manager/api/v1/serversetting/agent/holdAndStopAgent
 fi
 
-if [ "$STOP_SERVER" == "Y" ]
+if [ "$STOP_SERVER" == "Y" ] && [ "$SERVER_STATUS" == "RUNNING" ]
 then
 	#1-3. waiting request list finish
 	while true :
@@ -76,7 +102,7 @@ then
 	#1-6. server end check
 	while true :
 	do
-		pid="$(ps -ef | grep cname=$JJOBS_BASE/server | grep -v "grep" | awk '{print $2}')"
+		pid="$(ps -ef | grep $JJOBS_BASE/server | grep -v "grep" | awk '{print $2}')"
 		echo "Running PID: {$pid}"
 		echo $(TZ="Asia/Seoul" date +'%Y-%m-%d %T')
 		if [ -z "$pid" ]
@@ -89,7 +115,7 @@ then
 	done
 fi
 
-if [ "$STOP_AGENT" == "Y" ]
+if [ "$STOP_AGENT" == "Y" ] && [ "$AGENT_STATUS" == "RUNNING" ]
 then
 	#2-2. Check Agent down and delete pod
 	while true :

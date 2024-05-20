@@ -52,12 +52,6 @@ spec:
               value: "yes"
             - name: INSTALL_KIND
               value: "A"
-            - name: WGET_URL
-              value: "https://jjobs.s3.ap-northeast-2.amazonaws.com/agent/agent.host.zip"
-            - name: WGET_FOLDER_PATH
-              value: "/engn001/scouter"
-            - name: WGET_FILE_NAME
-              value: "agent.host.zip"
             - name: API_PRIVATE_TOKEN
               value: <input_your_api_user_private_token>
                 #- name: WGET_URL

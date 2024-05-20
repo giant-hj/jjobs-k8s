@@ -65,7 +65,7 @@ RUN yum update; yum clean all \
     procps \
     telnet \
     fontconfig \
-    iptables \
+    #iptables \
     jq \
     passwd  #RUN mkdir /var/run/sshd
 #RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N ''
@@ -116,7 +116,8 @@ COPY shell/agent-healthcheck.sh $WORKING_DIR/
 COPY installer/jjob_installer_linux_x64.sh /install/
 
 RUN chmod ug+x $WORKING_DIR/*.sh \
-    && chmod ug+x /install/*.sh
+    && chmod ug+x /install/*.sh \
+    && chmod ug+x /*.sh
 #RUN chown -R jjobs:jjobs $WORKING_DIR
 #RUN chown jjobs:jjobs /entrypoint.sh
 

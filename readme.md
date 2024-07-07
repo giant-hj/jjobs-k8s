@@ -110,6 +110,8 @@ spec:
               value: "1"
             - name: JJOB_SERVICE_NAME
               value: "jjobs.default.svc.cluster.local"
+            - name: LANG
+              value: ko_KR.utf8
           ports:
             - containerPort: 7065
             - containerPort: 7075
@@ -293,6 +295,8 @@ spec:
           value: "yes"
         - name: INSTALL_KIND
           value: "A"
+        - name: LANG
+          value: ko_KR.utf8
         volumeMounts:
         - mountPath: /logs001/jjobs
           name: jjobs-default-log

@@ -65,6 +65,7 @@ RUN yum update; yum clean all \
     procps \
     telnet \
     fontconfig \
+    dnsutils \
     passwd  #RUN mkdir /var/run/sshd
 #RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N ''
 
@@ -115,6 +116,7 @@ RUN chmod ug+x $WORKING_DIR/*.sh \
     && chmod ug+x /install/*.sh
 #RUN chown -R jjobs:jjobs $WORKING_DIR
 #RUN chown jjobs:jjobs /entrypoint.sh
+RUN echo 'if [ -f /etc/bashrc ]; then . /etc/bashrc; fi' >> /root/.bashrc
 
 VOLUME ["/logs001/jjobs"]
 

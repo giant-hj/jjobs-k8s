@@ -42,6 +42,8 @@ spec:
           value: "yes"
         - name: INSTALL_KIND
           value: "A"
+        - name: LANG
+          value: ko_KR.utf8
         volumeMounts:
         - mountPath: /logs001/jjobs
           name: jjobs-default-log

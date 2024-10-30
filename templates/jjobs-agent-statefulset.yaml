@@ -17,54 +17,71 @@ spec:
       labels:
         app: jjobs-agent
     spec:
-      terminationGracePeriodSeconds: 120
+      terminationGracePeriodSeconds: 36000
       containers:
-      - name: jjobs-agent-container
-        image: devonlab/jjobs
-        lifecycle:
-          preStop:
+        - name: jjobs-agent-container
+          image: devonlab/jjobs
+          imagePullPolicy: Always
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/bash
+                  - -c
+                  - /pre-stop.sh
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - /post-start.sh
+          env:
+            - name: AGENT_GROUP_ID
+              value: "0"
+            - name: JJOBS_SERVER_IP
+              value: "jjobs-0.jjobs.default.svc.cluster.local"
+            - name: SERVER_WEB_PORT
+              value: "7075"
+            - name: LOGS_BASE
+              value: "/logs001/jjobs"
+            - name: LOG_KEEP_DATE
+              value: "5"
+            - name: LOG_DELETE_YN
+              value: "Y"
+            - name: ON_BOOT
+              value: "yes"
+            - name: INSTALL_KIND
+              value: "A"
+            - name: LANG
+              value: ko_KR.utf8
+            - name: API_PRIVATE_TOKEN
+              value: <input_your_api_user_private_token>
+                #- name: WGET_URL
+                #value: "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz"
+                #- name: WGET_FOLDER_PATH
+                #value: "/home/jjobs/jdk-test"
+                #- name: WGET_FILE_NAME
+              #value: "jdk17.tar.gz"
+          volumeMounts:
+            - mountPath: /logs001/jjobs
+              name: jjobs-default-log
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "1"
+            limits:
+              memory: "1024Mi"
+              cpu: "2"
+          livenessProbe:
             exec:
-              command: ["/bin/sh","-c","kubectl delete pods $HOSTNAME --force"]
-        env:
-        - name: AGENT_GROUP_ID
-          value: "0"
-        - name: JJOBS_SERVER_IP
-          value: "jjobs.default.svc.cluster.local"
-        - name: SERVER_WEB_PORT
-          value: "7075"
-        - name: LOGS_BASE
-          value: "/logs001/jjobs"
-        - name: LOG_KEEP_DATE
-          value: "5"
-        - name: LOG_DELETE_YN
-          value: "Y"
-        - name: ON_BOOT
-          value: "yes"
-        - name: INSTALL_KIND
-          value: "A"
-        - name: LANG
-          value: ko_KR.utf8
-        volumeMounts:
-        - mountPath: /logs001/jjobs
-          name: jjobs-default-log
-        resources:
-          requests:
-            memory: "512Mi"
-            cpu: "1"
-          limits:
-            memory: "1024Mi"
-            cpu: "2"
-        livenessProbe:
-          exec:
-            command:
-            - /bin/bash
-            - -c
-            - /engn001/jjobs/agent/healthcheck.sh
-          initialDelaySeconds: 300
-          periodSeconds: 5
-          timeoutSeconds: 10
+              command:
+                - /bin/bash
+                - -c
+                - /engn001/jjobs/agent/healthcheck.sh
+            initialDelaySeconds: 300
+            periodSeconds: 5
+            timeoutSeconds: 10
       volumes:
-      - name: jjobs-default-log
-        persistentVolumeClaim:
-          claimName: efs-pvc-fargate-ms
-
+        - name: jjobs-default-log
+          persistentVolumeClaim:
+            claimName: jjobs-nfs-pvc

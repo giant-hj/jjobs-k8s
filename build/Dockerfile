@@ -65,6 +65,8 @@ RUN yum update; yum clean all \
     procps \
     telnet \
     fontconfig \
+    #iptables \
+    jq \
     dnsutils \
     passwd  #RUN mkdir /var/run/sshd
 #RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N ''
@@ -105,6 +107,8 @@ RUN ln -snf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 COPY xml/web_redis.xml $WORKING_DIR/
 COPY xml/context-manager_redis.xml $WORKING_DIR/
 COPY shell/entrypoint.sh /entrypoint.sh
+COPY shell/pre-stop.sh /pre-stop.sh
+COPY shell/post-start.sh /post-start.sh
 COPY shell/install-jjobs.sh shell/after-install.sh $WORKING_DIR/
 COPY shell/install-agent.sh $WORKING_DIR/
 COPY shell/start-all.sh shell/stop-all.sh $WORKING_DIR/
@@ -114,7 +118,8 @@ COPY shell/network-status-check.sh $WORKING_DIR/
 COPY installer/jjob_installer_linux_x64.sh /install/
 
 RUN chmod ug+x $WORKING_DIR/*.sh \
-    && chmod ug+x /install/*.sh
+    && chmod ug+x /install/*.sh \
+    && chmod ug+x /*.sh
 #RUN chown -R jjobs:jjobs $WORKING_DIR
 #RUN chown jjobs:jjobs /entrypoint.sh
 RUN echo 'if [ -f /etc/bashrc ]; then . /etc/bashrc; fi' >> /root/.bashrc

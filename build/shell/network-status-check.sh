@@ -9,34 +9,32 @@ then
     if [ "$ON_BOOT" == "yes" ] || [ "$ON_BOOT" == "y" ] || [ "$ON_BOOT" == "exceptagent" ]
     then
         while true; do
-            telnet_output=$( (echo quit | telnet $db_host $db_port) 2>&1 )
+            (echo quit | telnet $db_host $db_port) 2>&1 | grep -q "Connected to"
 
-            if [[ $telnet_output == *"Connected"* ]]; then
+            if [ $? -eq 0 ]; then
                 echo "Database connection is available."
                 break
             else
                 echo "Database connection failed. Retrying in 1 second..."
-                sleep 1
+                sleep 5
             fi
         done
     fi
 fi
-
 #check network status from agent to server
 if [ "$INSTALL_KIND" == "A" ]
 then
     if [ "$ON_BOOT" == "yes" ] || [ "$ON_BOOT" == "y" ]
     then
-        while true :
-        do
-            curl -sS $JJOBS_SERVER_IP:$SERVER_WEB_PORT/jjob-server/test.jsp
+        while true; do
+            curl -s $JJOBS_SERVER_IP:$SERVER_WEB_PORT/jjob-server/test.jsp > /dev/null
 
             if [ $? -eq 0 ]; then
                 echo "jjob-server is available."
                 break
             else
                 echo "jjob-server status check failed. Retrying in 1 second..."
-                sleep 1
+                sleep 5
             fi
         done
     fi

@@ -131,6 +131,8 @@ spec:
               value: "1"
             - name: JJOB_SERVICE_NAME
               value: "jjobs.default.svc.cluster.local"
+            - name: LANG
+              value: ko_KR.utf8
             - name: API_PRIVATE_TOKEN
               value: <input_your_api_user_private_token>
           ports:
@@ -325,6 +327,8 @@ spec:
           value: "yes"
         - name: INSTALL_KIND
           value: "A"
+        - name: LANG
+          value: ko_KR.utf8
         - name: API_PRIVATE_TOKEN
           value: <input_your_api_user_private_token>
         volumeMounts:

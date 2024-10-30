@@ -67,6 +67,7 @@ RUN yum update; yum clean all \
     fontconfig \
     #iptables \
     jq \
+    dnsutils \
     passwd  #RUN mkdir /var/run/sshd
 #RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N ''
 
@@ -113,6 +114,7 @@ COPY shell/install-agent.sh $WORKING_DIR/
 COPY shell/start-all.sh shell/stop-all.sh $WORKING_DIR/
 COPY shell/sample-shell.sh $WORKING_DIR/
 COPY shell/agent-healthcheck.sh $WORKING_DIR/
+COPY shell/network-status-check.sh $WORKING_DIR/
 COPY installer/jjob_installer_linux_x64.sh /install/
 
 RUN chmod ug+x $WORKING_DIR/*.sh \
@@ -120,6 +122,7 @@ RUN chmod ug+x $WORKING_DIR/*.sh \
     && chmod ug+x /*.sh
 #RUN chown -R jjobs:jjobs $WORKING_DIR
 #RUN chown jjobs:jjobs /entrypoint.sh
+RUN echo 'if [ -f /etc/bashrc ]; then . /etc/bashrc; fi' >> /root/.bashrc
 
 VOLUME ["/logs001/jjobs"]
 

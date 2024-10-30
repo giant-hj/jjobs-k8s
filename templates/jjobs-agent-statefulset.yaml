@@ -52,6 +52,8 @@ spec:
               value: "yes"
             - name: INSTALL_KIND
               value: "A"
+            - name: LANG
+              value: ko_KR.utf8
             - name: API_PRIVATE_TOKEN
               value: <input_your_api_user_private_token>
                 #- name: WGET_URL

@@ -375,6 +375,12 @@ spec:
     requests:
       storage: 1Gi
 ```
-
+#### Container Feature 기능 활성화
+J-Jobs에서 사용자 그룹별로 namespace를 관리하거나, k8s Job template을 사용하기 위해서는 Container Feature가 활성화 되어 있어야 한다.</br>
+J-Jobs manager를 통해 시스템 관리자(`root`)로 로그인한 뒤, [환경설정 > Feature 설정] 에서 `Container Feature`를 체크하고 저장한다.<br/>상세 설정
+ - 종료된 에이전트 자동 삭제 : Job 수행을 위한 일회성 Agent의 생성 또는 Agent의 설정에 의해 Agent명이 유지되지 않는 경우, 연결 종료가 1시간 이상 경과한 Agent를 자동으로 정리(삭제)할 수 있는 기능이다.
+ - 명령어 재시도 횟수 : Kubernetes/EKS/GKE 버전 혹은 내부 정책(csr등)에 따라 kubectl 명령어가 간헐적으로 실패할 가능성이 있는 경우, 명령어 실패로 인해 job lifecycle이 방해받지 않도록 재시도 횟수를 지정할 수 있다. (미사용: 0, 기본값: 1, 최댓값: 10, 성공할때 까지 재시작: -1)
+ > Container 환경에서 기동된 에이전트가 Job 처리 중 종료/재시작 되어 기동될 때 종료 전 완료하지 못했던 Running 상태의 k8s job 템플릿의 실행건이 있을 경우 Pod의 상태를 다시 조회하여 Job 처리를 계속 진행한다. 
+ > Container Feature 기능을 활성화할 경우, [관리자 > 사용자설정 > 사용자 그룹]에서 사용자그룹 별로 k8s namespace를 설정할 수 있다. 설정한 namespace는 k8s 관련 템플릿에서 `.spec.namespace`의 값으로 설정되며, 동일한 사용자그룹이 설정된 1레벨 폴더 하위의 모든 job은 동일한 k8s namespace에서 수행되는 것을 의미한다.
 
 

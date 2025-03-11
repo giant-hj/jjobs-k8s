@@ -25,16 +25,17 @@ spec:
           lifecycle:
             preStop:
               exec:
-                command:
-                  - /bin/bash
-                  - -c
-                  - /pre-stop.sh
-            postStart:
-              exec:
-                command:
-                  - /bin/sh
-                  - -c
-                  - /post-start.sh
+                #command:
+                  #- /bin/bash
+                  #- -c
+                  #- /pre-stop.sh
+                command: ["/bin/sh","-c","kubectl delete pods $HOSTNAME --force"]
+            #postStart:
+              #exec:
+                #command:
+                  #- /bin/sh
+                  #- -c
+                  #- /post-start.sh
           env:
             - name: AGENT_GROUP_ID
               value: "0"

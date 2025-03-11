@@ -21,19 +21,19 @@ spec:
           #securityContext:
             #capabilities:
               #add: ["NET_ADMIN"]
-          lifecycle:
-            preStop:
-              exec:
-                command:
-                  - /bin/sh
-                  - -c
-                  - /pre-stop.sh
-            postStart:
-              exec:
-                command:
-                  - /bin/sh
-                  - -c
-                  - /post-start.sh
+          #lifecycle:
+            #preStop:
+              #exec:
+                #command:
+                  #- /bin/sh
+                  #- -c
+                  #- /pre-stop.sh
+            #postStart:
+              #exec:
+                #command:
+                  #- /bin/sh
+                  #- -c
+                  #- /post-start.sh
           env:
             - name: MANAGER_WEB_PORT
               value: "7065"

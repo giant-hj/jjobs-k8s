@@ -64,10 +64,10 @@ tail -f $LOGS_BASE/server/$HOSTNAME/server.log@g' $JJOBS_BASE/start_server.sh
         fi
 
         echo "setting for java security.."
-        sed -i '307d' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security
-        sed -i '307inetworkaddress.cache.ttl=1' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security
-        sed -i '322d' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security
-        sed -i '322inetworkaddress.cache.negative.ttl=3' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security
+        sed -i '316d' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
+        sed -i '316inetworkaddress.cache.ttl=1' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
+        sed -i '331d' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
+        sed -i '331inetworkaddress.cache.negative.ttl=3' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
 fi
 
 if [ "$INSTALL_KIND" == "M" ] || [ "$INSTALL_KIND" == "F" ] ; then
@@ -119,10 +119,10 @@ if [ "$INSTALL_KIND" == "M" ] || [ "$INSTALL_KIND" == "F" ] ; then
         fi
 
         echo "setting for java security.."
-        sed -i '307d' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security
-        sed -i '307inetworkaddress.cache.ttl=1' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security
-        sed -i '322d' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security
-        sed -i '322inetworkaddress.cache.negative.ttl=3' $JJOBS_BASE/jdk8u212-b03/jre/lib/security/java.security
+        sed -i '316d' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
+        sed -i '316inetworkaddress.cache.ttl=1' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
+        sed -i '331d' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
+        sed -i '331inetworkaddress.cache.negative.ttl=3' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
 fi
 
 if [ "$WGET_URL" ] && [ "$WGET_FOLDER_PATH" ] && [ "$WGET_FILE_NAME" ] ; then

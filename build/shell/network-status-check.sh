@@ -9,9 +9,7 @@ then
     if [ "$ON_BOOT" == "yes" ] || [ "$ON_BOOT" == "y" ] || [ "$ON_BOOT" == "exceptagent" ]
     then
         while true; do
-            (echo quit | telnet $db_host $db_port) 2>&1 | grep -q "Connected to"
-
-            if [ $? -eq 0 ]; then
+            if timeout 3 bash -c "echo > /dev/tcp/$db_host/$db_port"; then
                 echo "Database connection is available."
                 break
             else

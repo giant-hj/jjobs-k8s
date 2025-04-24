@@ -62,13 +62,19 @@ tail -f $LOGS_BASE/server/$HOSTNAME/server.log@g' $JJOBS_BASE/start_server.sh
         else
           sed -i '3iexport JJOB_SERVER_IP='"$HOSTNAME"'.'"$JJOB_SERVICE_NAME"'' $JJOBS_BASE/start_server.sh
         fi
-
-        echo "setting for java security.."
-        sed -i '316d' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
-        sed -i '316inetworkaddress.cache.ttl=1' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
-        sed -i '331d' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
-        sed -i '331inetworkaddress.cache.negative.ttl=3' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
 fi
+
+echo "setting for java security.."
+if [ -z "$NETWORKADDRESS_CACHE_TTL" ]; then
+  export NETWORKADDRESS_CACHE_TTL=1
+fi
+if [ -z "$NETWORKADDRESS_CACHE_NEGATIVE_TTL" ]; then
+  export NETWORKADDRESS_CACHE_NEGATIVE_TTL=3
+fi
+sed -i '313d' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
+sed -i '313inetworkaddress.cache.ttl='"$NETWORKADDRESS_CACHE_TTL"'' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
+sed -i '328d' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
+sed -i '328inetworkaddress.cache.negative.ttl='"$NETWORKADDRESS_CACHE_NEGATIVE_TTL"'' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
 
 if [ "$INSTALL_KIND" == "M" ] || [ "$INSTALL_KIND" == "F" ] ; then
         echo "unwar..."
@@ -117,12 +123,6 @@ if [ "$INSTALL_KIND" == "M" ] || [ "$INSTALL_KIND" == "F" ] ; then
         if [ -n "$SSO_KEYCLOAK_ISSUER_URI" ]; then
                 sed -i '3iexport SSO_KEYCLOAK_ISSUER_URI='$SSO_KEYCLOAK_ISSUER_URI'' start_manager.sh
         fi
-
-        echo "setting for java security.."
-        sed -i '316d' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
-        sed -i '316inetworkaddress.cache.ttl=1' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
-        sed -i '331d' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
-        sed -i '331inetworkaddress.cache.negative.ttl=3' $JJOBS_BASE/openjdk-8u342-b07-jre/lib/security/java.security
 fi
 
 if [ "$WGET_URL" ] && [ "$WGET_FOLDER_PATH" ] && [ "$WGET_FILE_NAME" ] ; then

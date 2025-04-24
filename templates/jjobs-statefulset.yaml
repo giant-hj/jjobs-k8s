@@ -57,6 +57,10 @@ spec:
               value: "10"
             - name: LOG_DELETE_YN
               value: "Y"
+            - name: NETWORKADDRESS_CACHE_TTL
+              value: "1"
+            - name: NETWORKADDRESS_CACHE_NEGATIVE_TTL
+              value: "3"
             - name: ON_BOOT
               value: "exceptagent"
             - name: INSTALL_KIND

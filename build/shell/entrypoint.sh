@@ -13,7 +13,9 @@ then
   sleep 1
   . $WORKING_DIR/after-install.sh
   sleep 1
-  . $WORKING_DIR/network-status-check.sh || true
+  (
+    $WORKING_DIR/network-status-check.sh || true
+  )
 
   if [ "$ON_BOOT" == "yes" ] || [ "$ON_BOOT" == "y" ]; then
     if [ "$INSTALL_KIND" == "A" ]; then

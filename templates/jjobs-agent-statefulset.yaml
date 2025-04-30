@@ -22,14 +22,13 @@ spec:
         - name: jjobs-agent-container
           image: devonlab/jjobs
           imagePullPolicy: Always
-          lifecycle:
-            preStop:
-              exec:
+          #lifecycle:
+            #preStop:
+              #exec:
                 #command:
                   #- /bin/bash
                   #- -c
                   #- /pre-stop.sh
-                command: ["/bin/sh","-c","kubectl delete pods $HOSTNAME --force"]
             #postStart:
               #exec:
                 #command:
@@ -55,13 +54,13 @@ spec:
               value: "A"
             - name: LANG
               value: ko_KR.utf8
-            - name: API_PRIVATE_TOKEN
-              value: <input_your_api_user_private_token>
-                #- name: WGET_URL
-                #value: "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz"
-                #- name: WGET_FOLDER_PATH
-                #value: "/home/jjobs/jdk-test"
-                #- name: WGET_FILE_NAME
+            #- name: API_PRIVATE_TOKEN
+              #value: <input_your_api_user_private_token>
+            #- name: WGET_URL
+              #value: "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz"
+            #- name: WGET_FOLDER_PATH
+              #value: "/home/jjobs/jdk-test"
+            #- name: WGET_FILE_NAME
               #value: "jdk17.tar.gz"
           volumeMounts:
             - mountPath: /logs001/jjobs
@@ -76,12 +75,21 @@ spec:
           livenessProbe:
             exec:
               command:
-                - /bin/bash
-                - -c
-                - /engn001/jjobs/agent/healthcheck.sh
+              - /bin/bash
+              - -c
+              - /working/liveness.sh
             initialDelaySeconds: 300
             periodSeconds: 5
             timeoutSeconds: 10
+          #readinessProbe:
+            #exec:
+              #command:
+              #- /bin/bash
+              #- -c
+              #- /working/readiness.sh
+            #initialDelaySeconds: 60
+            #periodSeconds: 5
+            #timeoutSeconds: 10
       volumes:
         - name: jjobs-default-log
           persistentVolumeClaim:

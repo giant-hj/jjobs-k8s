@@ -37,13 +37,13 @@ J-Jobs의 매니저, 서버, 에이전트를 하나의 Pod 안에 설치하고 �
 | DB_PASSWD	           | jjobs1234                              | JDBC URL로 DB에 접속할 때 패스워드                                                                                                                                                                                                        |
 | ENCRYPTED_DB_USER    | oSAv48QO9j6VAy7mT8YYbA==                                  | 	JDBC URL로 DB에 접속할 때 사용자명<br/>USE_DB_ENCRTPY가 Y 일 때 사용                                                                                                                                                                          |
 | ENCRYPTED_DB_PASSWD	 | v3bY7QfdJPzTEuxcVWlq3w==                              | JDBC URL로 DB에 접속할 때 패스워드<br/>USE_DB_ENCRTPY가 Y 일 때 사용                                                                                                                                                                           |
-| JJOB_SERVICE_NAME    | jjobs.default.svc.cluster.local        | 전체 설치/서버 설치 시 사용<br/>(start_server.sh 에서 JJOB_SERVER_IP 환경 변수로 "StatefulSet으로 생성된 pod의 hostname + JJOB_SERVICE_NAME"를 추가함)<br/><br/>(예시)<br/>export JJOB_SERVER_IP=jjobs-0.jjobs.default.svc.cluster.local                      |
+| JJOB_SERVICE_NAME    | jjobs.default.svc.cluster.local        | Manager에서 Server로 통신할 jjob-server의 서비스명을 입력한다.(전체 설치/서버 설치 시 사용)<br/>start_server.sh 에서 JJOB_SERVER_IP 값으로 "pod의 hostname + JJOB_SERVICE_NAME"를 사용한다.<br/><br/>(예시)<br/>export JJOB_SERVER_IP=jjobs-0.jjobs.default.svc.cluster.local      |
 | AGENT_GROUP_ID       | 0                                      | 	에이전트 그룹 ID 설정                                                                                                                                                                                                                  |
 | LOGS_BASE	         | /logs001/jjobs	                        | (에이전트 설정) 로그 경로                                                                                                                                                                                                                 |
 | LOG_KEEP_DATE	       | 5                                      | 	(에이전트 설정) 로그 유지 일수                                                                                                                                                                                                             |
 | LOG_DELETE_YN        | 	Y                                     | (에이전트 설정) 로그 백업 옵션<br/>-Y : 삭제<br/>-N : 백업<br/>-Z : 백업/압축                                                                                                                                                                       |
 | JJOBS_SERVER_IP      | 	127.0.0.1                             | 에이전트가 서버에 접근하기 위한 서버의 서비스 IP<br/><br/>(예시)<br/>start_agent.sh에 들어가는 서버 IP(JJOBS_SERVER_IP)는 서비스 명을 사용해도 됨 → jjobs.default.svc.cluster.local                                                                                     |
-| API_PRIVATE_TOKEN    |                                        | `preStop`, `postStart` 훅에 사용할 J-Jobs 사용자의 비밀 토큰<br/><br/>(예시)<br/>26da841583291d1b6ef7                                                                                                                                          |
+| API_PRIVATE_TOKEN    |                                        | `readinessProbe`와 `preStop`, `postStart` 훅에 사용할 J-Jobs 사용자의 비밀 토큰<br/><br/>(예시)<br/>26da841583291d1b6ef7                                                                                                                                          |
 | WGET_URL |                                        | 추가 APP 설치 필요 시 다운로드 URL<br/>zip, tar.gz, tar 형식의 경우 다운로드 후 WGET_FOLDER_PATH 경로에 압축 해제함<br/><br/>(예시)<br/>https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz |
 | WGET_FOLDER_PATH |                                        | 추가 APP 설치 필요 시 설치 경로<br/><br/>(예시)<br/>/home/jjobs/jdk-test                                                                                                                                                                     |
 | WGET_FILE_NAME |                                        | 추가 APP 다운로드 파일명<br/><br/>(예시)<br/>jdk17.tar.gz                                                                                                                                                                                  |
@@ -60,6 +60,12 @@ J-Jobs의 매니저, 서버, 에이전트를 하나의 Pod 안에 설치하고 �
 - `.spec.template.spec.terminationGracePeriodSeconds` : preStop 훅이 실행될 수 있는 충분한 유예(처리중인 Job이 완료될 수 있는) 시간을 정의한다. 해당 시간이 경과되면 처리중인 Job이 있더라도 Pod가 종료된다.
 - 초기 설치 시에는 `preStop`과 `postStart` 훅에서 사용할 `API_PRIVATE_TOKEN`을 정의할 수 없으므로, 해당 환경 변수와 `.spec.template.spec.containers.lifecycle`을 정의하지 않음으로써 Graceful shutdown 설정을 구성하지 않고 설치한다.
 - `API_PRIVATE_TOKEN` 확인 방법은 J-Jobs 가이드 문서의 `04_개발자가이드 > 01_REST_API > ##1.3 헤더` 부분을 참고한다.
+
+#### 컨테이너 상태 검증
+- J-Jobs 자원(매니저/서버/에이전트)에 대한 상태 검증을 위해 livenessProbe와 readinessProbe를 설정한다.
+- livenessProbe는 컨테이너가 정상적으로 동작하는지 확인하기 위한 설정으로, liveness.sh 파일을 호출하여 J-Jobs 프로세스가 정상적으로 동작하는지 확인한다.
+- readinessProbe는 컨테이너가 요청을 처리할 준비가 되었는지 확인하기 위한 설정으로, readiness.sh 파일을 호출하여 J-Jobs 자원의 통신 상태가 정상인지 확인한다.
+- 초기 설치 시에는 `reaindessProbe` 커맨드에서 사용할 `API_PRIVATE_TOKEN`을 정의할 수 없으므로, `spec.template.spec.containers.readinessProbe`을 정의하지 않고 설치한다. 
 
 #### 매니저/서버를 위한 StatefulSet 구성
 - 초기 설치 시에는 replica 1로 설정하여 StatefulSet 생성
@@ -157,6 +163,24 @@ spec:
             limits:
               memory: "2048Mi"
               cpu: "2"
+          livenessProbe:
+            exec:
+              command:
+                - /bin/bash
+                - -c
+                - /working/liveness.sh
+            initialDelaySeconds: 300
+            periodSeconds: 5
+            timeoutSeconds: 10
+          #readinessProbe:
+            #exec:
+              #command:
+                #- /bin/bash
+                #- -c
+                #- /working/readiness.sh
+            #initialDelaySeconds: 60
+            #periodSeconds: 5
+            #timeoutSeconds: 10
       volumes:
         - name: jjobs-logs
           persistentVolumeClaim:
@@ -299,68 +323,76 @@ spec:
     spec:
       terminationGracePeriodSeconds: 36000
       containers:
-      - name: jjobs-agent-container
-        image: devonlab/jjobs:latest
-        lifecycle:
-          preStop:
+        - name: jjobs-agent-container
+          image: devonlab/jjobs:latest
+          #lifecycle:
+            #preStop:
+              #exec:
+                #command:
+                  #- /bin/bash
+                  #- -c
+                  #- /pre-stop.sh
+            #postStart:
+              #exec:
+                #command:
+                  #- /bin/sh
+                  #- -c
+                  #- /post-start.sh
+          env:
+            - name: AGENT_GROUP_ID
+              value: "1"
+            - name: JJOBS_SERVER_IP
+              value: "jjobs-0.jjobs.default.svc.cluster.local"
+            - name: SERVER_WEB_PORT
+              value: "7075"
+            - name: LOGS_BASE
+              value: "/logs001/jjobs"
+            - name: LOG_KEEP_DATE
+              value: "5"
+            - name: LOG_DELETE_YN
+              value: "Y"
+            - name: ON_BOOT
+              value: "yes"
+            - name: INSTALL_KIND
+              value: "A"
+            - name: LANG
+              value: ko_KR.utf8
+            #- name: CUSTOM_COMMAND
+              #value: "echo 'Hello from env!' && ls -l"
+            #- name: API_PRIVATE_TOKEN
+              #value: <input_your_api_user_private_token>
+          volumeMounts:
+            - mountPath: /logs001/jjobs
+              name: jjobs-default-log
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "1"
+            limits:
+              memory: "1024Mi"
+              cpu: "2"
+          livenessProbe:
             exec:
-              #command:
-                #- /bin/bash
-                #- -c
-                #- /pre-stop.sh
-              command: ["/bin/sh","-c","kubectl delete pods $HOSTNAME --force"]
-          #postStart:
+              command:
+              - /bin/bash
+              - -c
+              - /working/liveness.sh
+            initialDelaySeconds: 300
+            periodSeconds: 5
+            timeoutSeconds: 10
+          #readinessProbe:
             #exec:
               #command:
-                #- /bin/sh
-                #- -c
-                #- /post-start.sh
-        env:
-        - name: AGENT_GROUP_ID
-          value: "1"
-        - name: JJOBS_SERVER_IP
-          value: "jjobs-0.jjobs.default.svc.cluster.local"
-        - name: SERVER_WEB_PORT
-          value: "7075"
-        - name: LOGS_BASE
-          value: "/logs001/jjobs"
-        - name: LOG_KEEP_DATE
-          value: "5"
-        - name: LOG_DELETE_YN
-          value: "Y"
-        - name: ON_BOOT
-          value: "yes"
-        - name: INSTALL_KIND
-          value: "A"
-        - name: LANG
-          value: ko_KR.utf8
-        #- name: CUSTOM_COMMAND
-          #value: "echo 'Hello from env!' && ls -l"
-        #- name: API_PRIVATE_TOKEN
-          #value: <input_your_api_user_private_token>
-        volumeMounts:
-        - mountPath: /logs001/jjobs
-          name: jjobs-default-log
-        resources:
-          requests:
-            memory: "512Mi"
-            cpu: "1"
-          limits:
-            memory: "1024Mi"
-            cpu: "2"
-        livenessProbe:
-          exec:
-            command:
-            - /bin/bash
-            - -c
-            - /engn001/jjobs/agent/healthcheck.sh
-          initialDelaySeconds: 300
-          periodSeconds: 5
-          timeoutSeconds: 10
+              #- /bin/bash
+              #- -c
+              #- /working/readiness.sh
+            #initialDelaySeconds: 60
+            #periodSeconds: 5
+            #timeoutSeconds: 10
       volumes:
-      - name: jjobs-default-log
-        persistentVolumeClaim:
-          claimName: efs-jjobs
+        - name: jjobs-default-log
+          persistentVolumeClaim:
+            claimName: efs-jjobs
 ```
 
 #### PersistentVolumClaim 예시

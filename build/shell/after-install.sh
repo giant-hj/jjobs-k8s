@@ -11,7 +11,6 @@ if [ "$INSTALL_KIND" == "A" ] || [ "$INSTALL_KIND" == "F" ] ; then
         sed -i 's@log.file.keep.date_cnt=.*$@log.file.keep.date_cnt='"$LOG_KEEP_DATE"'@g' $JJOBS_BASE/agent/app/META-INF/resource.properties
         sed -i 's@log.file.keep.backup_delete_yn=.*$@log.file.keep.backup_delete_yn='"$LOG_DELETE_YN"'@g' $JJOBS_BASE/agent/app/META-INF/resource.properties
 
-        cp $WORKING_DIR/agent-healthcheck.sh $JJOBS_BASE/agent/healthcheck.sh
         mkdir -p $JJOBS_BASE/agent/.bin
 fi
 

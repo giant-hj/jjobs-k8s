@@ -22,14 +22,13 @@ spec:
         - name: jjobs-agent-container
           image: devonlab/jjobs
           imagePullPolicy: Always
-          lifecycle:
-            preStop:
-              exec:
+          #lifecycle:
+            #preStop:
+              #exec:
                 #command:
                   #- /bin/bash
                   #- -c
                   #- /pre-stop.sh
-                command: ["/bin/sh","-c","kubectl delete pods $HOSTNAME --force"]
             #postStart:
               #exec:
                 #command:
@@ -80,10 +79,19 @@ spec:
               command:
                 - /bin/bash
                 - -c
-                - /engn001/jjobs/agent/healthcheck.sh
+                - /working/liveness.sh
             initialDelaySeconds: 300
             periodSeconds: 5
             timeoutSeconds: 10
+          #readinessProbe:
+            #exec:
+              #command:
+                #- /bin/bash
+                #- -c
+                #- /working/readiness.sh
+            #initialDelaySeconds: 60
+            #periodSeconds: 5
+            #timeoutSeconds: 10
       volumes:
         - name: jjobs-default-log
           persistentVolumeClaim:

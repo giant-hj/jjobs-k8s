@@ -13,6 +13,11 @@ then
   sleep 1
   . $WORKING_DIR/after-install.sh
   sleep 1
+  if [ -n "$CUSTOM_COMMAND" ]; then
+    echo "Executing dynamic command: $CUSTOM_COMMAND"
+    eval "$CUSTOM_COMMAND"
+  fi
+  sleep 1
   (
     $WORKING_DIR/network-status-check.sh || true
   )

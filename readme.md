@@ -43,6 +43,8 @@ J-Jobs의 매니저, 서버, 에이전트를 하나의 Pod 안에 설치하고 �
 | LOG_KEEP_DATE	       | 5                                      | 	(에이전트 설정) 로그 유지 일수                                                                                                                                                                                                             |
 | LOG_DELETE_YN        | 	Y                                     | (에이전트 설정) 로그 백업 옵션<br/>-Y : 삭제<br/>-N : 백업<br/>-Z : 백업/압축                                                                                                                                                                       |
 | JJOBS_SERVER_IP      | 	127.0.0.1                             | 에이전트가 서버에 접근하기 위한 서버의 서비스 IP<br/><br/>(예시)<br/>start_agent.sh에 들어가는 서버 IP(JJOBS_SERVER_IP)는 서비스 명을 사용해도 됨 → jjobs.default.svc.cluster.local                                                                                     |
+| NETWORKADDRESS_CACHE_TTL      | 	1                                     | Java의 DNS positive cache (정상적으로 조회된 DNS)의 TTL(Time To Live) 설정                                                                                                                                                        |
+| NETWORKADDRESS_CACHE_NEGATIVE_TTL      | 	3                                     | Java의 DNS negative cache (실패한 DNS 조회)의 TTL(Time To Live) 설정                                                                                                                                                                    |
 | API_PRIVATE_TOKEN    |                                        | `readinessProbe`와 `preStop`, `postStart` 훅에 사용할 J-Jobs 사용자의 비밀 토큰<br/><br/>(예시)<br/>26da841583291d1b6ef7                                                                                                                                          |
 | WGET_URL |                                        | 추가 APP 설치 필요 시 다운로드 URL<br/>zip, tar.gz, tar 형식의 경우 다운로드 후 WGET_FOLDER_PATH 경로에 압축 해제함<br/><br/>(예시)<br/>https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz |
 | WGET_FOLDER_PATH |                                        | 추가 APP 설치 필요 시 설치 경로<br/><br/>(예시)<br/>/home/jjobs/jdk-test                                                                                                                                                                     |
@@ -131,6 +133,10 @@ spec:
               value: "10"
             - name: LOG_DELETE_YN
               value: "Y"
+            - name: NETWORKADDRESS_CACHE_TTL
+              value: "1"
+            - name: NETWORKADDRESS_CACHE_NEGATIVE_TTL
+              value: "3"
             - name: ON_BOOT
               value: "exceptagent"
             - name: INSTALL_KIND
@@ -355,6 +361,10 @@ spec:
               value: "yes"
             - name: INSTALL_KIND
               value: "A"
+            - name: NETWORKADDRESS_CACHE_TTL
+              value: "1"
+            - name: NETWORKADDRESS_CACHE_NEGATIVE_TTL
+              value: "3"
             - name: LANG
               value: ko_KR.utf8
             #- name: CUSTOM_COMMAND

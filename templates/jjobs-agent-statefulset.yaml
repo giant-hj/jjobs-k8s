@@ -52,6 +52,10 @@ spec:
               value: "yes"
             - name: INSTALL_KIND
               value: "A"
+            - name: NETWORKADDRESS_CACHE_TTL
+              value: "1"
+            - name: NETWORKADDRESS_CACHE_NEGATIVE_TTL
+              value: "3"
             - name: LANG
               value: ko_KR.utf8
             #- name: CUSTOM_COMMAND

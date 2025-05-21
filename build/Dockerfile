@@ -39,9 +39,8 @@ ENV JDBC_URL=jdbc:postgresql://127.0.0.1:7432/jjobs \
 
 # Environment variables - server
 # -------------------------------------------------------------
-ENV JJOBS_SERVER_ID=1 \
-    JJOBS_SERVER_IP=127.0.0.1 \
-    JJOB_SERVICE_NAME=.default.svc.cluster.local
+ENV JJOBS_SERVER_IP=127.0.0.1 \
+    JJOB_SERVICE_NAME=jjobs.default.svc.cluster.local
 
 # Environment variables - agent
 # -------------------------------------------------------------
@@ -117,6 +116,8 @@ COPY shell/start-all.sh shell/stop-all.sh $WORKING_DIR/
 COPY shell/sample-shell.sh $WORKING_DIR/
 COPY shell/agent-healthcheck.sh $WORKING_DIR/
 COPY shell/network-status-check.sh $WORKING_DIR/
+COPY shell/readiness.sh $WORKING_DIR/
+COPY shell/liveness.sh $WORKING_DIR/
 COPY installer/jjob_installer_linux_x64.sh /install/
 
 RUN chmod ug+x $WORKING_DIR/*.sh \

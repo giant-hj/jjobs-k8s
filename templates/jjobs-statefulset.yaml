@@ -71,8 +71,10 @@ spec:
               value: "jjobs.default.svc.cluster.local"
             - name: LANG
               value: ko_KR.utf8
-            - name: API_PRIVATE_TOKEN
-              value: <input_your_api_user_private_token>
+            #- name: CUSTOM_COMMAND
+              #value: "echo 'Hello from env!' && ls -l"
+            #- name: API_PRIVATE_TOKEN
+              #value: <input_your_api_user_private_token>
           ports:
             - containerPort: 7065
             - containerPort: 7075
@@ -91,6 +93,24 @@ spec:
             limits:
               memory: "2048Mi"
               cpu: "2"
+          livenessProbe:
+            exec:
+              command:
+                - /bin/bash
+                - -c
+                - /working/liveness.sh
+            initialDelaySeconds: 300
+            periodSeconds: 5
+            timeoutSeconds: 10
+          #readinessProbe:
+            #exec:
+              #command:
+                #- /bin/bash
+                #- -c
+                #- /working/readiness.sh
+            #initialDelaySeconds: 60
+            #periodSeconds: 5
+            #timeoutSeconds: 10
       volumes:
         - name: jjobs-logs
           persistentVolumeClaim:

@@ -18,7 +18,9 @@ then
     eval "$CUSTOM_COMMAND"
   fi
   sleep 1
-  . $WORKING_DIR/network-status-check.sh || true
+  (
+    $WORKING_DIR/network-status-check.sh || true
+  )
 
   if [ "$ON_BOOT" == "yes" ] || [ "$ON_BOOT" == "y" ]; then
     if [ "$INSTALL_KIND" == "A" ]; then

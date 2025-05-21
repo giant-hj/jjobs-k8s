@@ -55,13 +55,15 @@ spec:
               value: "A"
             - name: LANG
               value: ko_KR.utf8
-            - name: API_PRIVATE_TOKEN
-              value: <input_your_api_user_private_token>
-                #- name: WGET_URL
-                #value: "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz"
-                #- name: WGET_FOLDER_PATH
-                #value: "/home/jjobs/jdk-test"
-                #- name: WGET_FILE_NAME
+            - name: CUSTOM_COMMAND
+              value: "echo 'Hello from env!' && ls -l"
+            #- name: API_PRIVATE_TOKEN
+              #value: <input_your_api_user_private_token>
+            #- name: WGET_URL
+              #value: "https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz"
+            #- name: WGET_FOLDER_PATH
+              #value: "/home/jjobs/jdk-test"
+            #- name: WGET_FILE_NAME
               #value: "jdk17.tar.gz"
           volumeMounts:
             - mountPath: /logs001/jjobs

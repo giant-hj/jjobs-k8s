@@ -54,6 +54,8 @@ spec:
               value: "A"
             - name: LANG
               value: ko_KR.utf8
+            #- name: CUSTOM_COMMAND
+              #value: "echo 'Hello from env!' && ls -l"
             #- name: API_PRIVATE_TOKEN
               #value: <input_your_api_user_private_token>
             #- name: WGET_URL
@@ -75,18 +77,18 @@ spec:
           livenessProbe:
             exec:
               command:
-              - /bin/bash
-              - -c
-              - /working/liveness.sh
+                - /bin/bash
+                - -c
+                - /working/liveness.sh
             initialDelaySeconds: 300
             periodSeconds: 5
             timeoutSeconds: 10
           #readinessProbe:
             #exec:
               #command:
-              #- /bin/bash
-              #- -c
-              #- /working/readiness.sh
+                #- /bin/bash
+                #- -c
+                #- /working/readiness.sh
             #initialDelaySeconds: 60
             #periodSeconds: 5
             #timeoutSeconds: 10
